@@ -1,0 +1,90 @@
+:host-context(amboss-content) {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12), 0 32px 112px rgba(0, 0, 0, 0.24);
+    border-radius: 12px;
+    color: initial;
+    visibility: hidden;
+    pointer-events: none;
+    height: 0;
+}
+
+:host-context([show-popper]) {
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 9999;
+    max-width: 400px;
+    height: auto;
+}
+
+:host-context(amboss-content) > #content {
+    display: none;
+    height: 0;
+}
+
+:host-context([show-popper]) > #content {
+    display: block;
+    height: auto;
+}
+
+:host-context([show-popper]) > #arrow::before {
+    content: '';
+    visibility: visible;
+    transform: rotate(45deg);
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #fff;
+}
+
+:host-context([data-theme='dark-theme']) svg.tooltip-logo .black {
+    fill: #fff;
+}
+
+:host-context([data-theme='dark-theme']) > #arrow::before {
+    background-color: #24282d;
+}
+
+:host-context([data-popper-placement^='top']) > #arrow {
+    bottom: 5px;
+}
+
+:host-context([data-popper-placement^='bottom']) > #arrow {
+    top: -5px;
+}
+
+:host-context([data-popper-placement^='left']) > #arrow {
+    right: 5px;
+}
+
+:host-context([data-popper-placement^='right']) > #arrow {
+    left: -5px;
+}
+
+:host-context([show-popper]) > #arrow > #buffer::before {
+    content: '';
+    position: absolute;
+    background-color: transparent;
+}
+
+:host-context([data-popper-placement^='bottom']) > #arrow > #buffer::before,
+:host-context([data-popper-placement^='top']) > #arrow > #buffer::before {
+    width: 240px;
+    height: 1.5rem;
+    margin-left: -120px;
+    margin-top: -0.5rem;
+}
+
+:host-context([data-popper-placement^='top']) > #arrow > #buffer::before {
+    margin-top: -0.5rem;
+}
+
+/*:host-context([data-popper-placement^='right']) > #arrow > #buffer::before,*/
+/*:host-context([data-popper-placement^='left']) > #arrow > #buffer::before {*/
+/*    width: 1.5rem;*/
+/*    height: 140px;*/
+/*    margin-top: -70px;*/
+/*    margin-left: -0.8rem;*/
+/*}*/
+
+/*:host-context([data-popper-placement^='left']) > #arrow > #buffer::before {*/
+/*    margin-left: 0;*/
+/*}*/
