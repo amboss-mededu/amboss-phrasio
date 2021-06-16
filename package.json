@@ -1,0 +1,52 @@
+{
+  "name": "@amboss-mededu/amboss-annotate",
+  "version": "0.0.6",
+  "description": "DOM annotation",
+  "author": "Alex Jeffcott",
+  "license": "ISC",
+  "lockfileVerion": 1,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amboss-mededu/amboss-annotate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/amboss-mededu/amboss-annotate/issues"
+  },
+  "homepage": "https://github.com/amboss-mededu/amboss-annotate#readme",
+  "workspaces": [
+    "./packages/*"
+  ],
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/amboss-annotate.umd.js",
+  "module": "./dist/amboss-annotate.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/amboss-annotate.es.js",
+      "require": "./dist/amboss-annotate.umd.js"
+    }
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "vite build",
+    "legacy": "vite build --config vite.config.legacy.ts",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "@types/node": "^15.12.2",
+    "@vitejs/plugin-legacy": "^1.4.1",
+    "eslint": "^7.28.0",
+    "regenerator-runtime": "^0.13.7",
+    "typescript": "^4.3.2",
+    "vite": "^2.3.7"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.9.2",
+    "lodash.throttle": "^4.1.1"
+  }
+}
