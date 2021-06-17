@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script id="amboss-phrasio" type="module" crossorigin src="./tests/index.js"></script>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/javascript">
+    const ambossScript = document.querySelector('#amboss-phrasio');
+    ambossScript.addEventListener('load', function() {
+        if (window.adaptor) {
+            const app = document.getElementById('app')
+            app.innerHTML = `<amboss-phrasio
+                data-phrasio-id="test"
+                data-locale="en"
+                data-annotation-variant="underline"
+                data-theme="light-theme"
+                data-campaign=""
+                data-custom-branding="no"
+                show-popper
+            />`
+        }
+    });
+</script>
+</body>
+</html>

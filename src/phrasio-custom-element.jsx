@@ -1,30 +1,25 @@
-import { h, Fragment, render } from 'preact'
-import { Icon, Card, Stack, Box, CardBox, Divider, Inline, Link, Text } from '@amboss/design-system'
-import { getHref, getAssetSrc, track, getPhrasio } from './utils'
+import { render } from 'preact'
+import { Icon, Card, Stack, CardBox, Divider, Inline, Link, Text } from '@amboss/design-system'
+import { getHref, track, getPhrasio, loadFonts } from './utils'
 import TooltipLogo from './TooltipLogo'
-import browser from 'webextension-polyfill'
-import { FEEDBACK_URL_DE, FEEDBACK_URL_EN } from '../shared/config'
-import { tooltip_link_clicked } from '../background/event-names'
+import { FEEDBACK_URL_DE, FEEDBACK_URL_EN } from './config'
+import { tooltip_link_clicked } from './event-names'
+import styles from './phrasio-custom-element.css'
 
-export function Destinations({ destinations = [], title, locale, phrasioId, trackingLabel }) {
+export function Destinations({ destinations = [], title, locale, phrasioId, trackingLabel, campaign }) {
   if (!destinations.length) return ''
   return (
     <Stack space="xs">
-      {destinations.map(({ label, anchor, lc_xid }) => {
-        const href = getHref({ anchor, lc_xid, title, locale })
+      {destinations.map(({ label, particleEid, articleEid }) => {
+        const href = getHref({ particleEid, label, articleEid, title, locale, campaign })
         function handleLinkClick(e) {
-          // e.target.preventDefault()
-          // const customEvent = new CustomEvent('amboss-event', {
-          //   detail: { eventName: trackingEventName, phrasioId },
-          // })
-          // document.dispatchEvent(customEvent)
           track(trackingLabel, {
             phrasioId,
             label,
           })
         }
         return (
-          <Inline key={lc_xid} space="s" noWrap vAlignItems="center">
+          <Inline key={articleEid} space="s" noWrap vAlignItems="center">
             <Icon name="article" variant="primary" />
             <Link
               href={href}
@@ -43,23 +38,24 @@ export function Destinations({ destinations = [], title, locale, phrasioId, trac
   )
 }
 
-const TooltipContent = ({ phrasioId, locale, theme, title, etymology, description, destinations }) => {
+const TooltipContent = ({ phrasioId, locale, theme, title, etymology, description, destinations, campaign, customBranding }) => {
   return (
     <div id="content" className={theme}>
       <Card key={title} title={title} subtitle={etymology ? etymology : ''}>
         <CardBox>
           <Stack space="xs">
             {description ? <Text>{description}</Text> : ''}
-            <Destinations
+            {customBranding === 'no' ? (<Destinations
               destinations={destinations}
               locale={locale}
               title={title}
               phrasioId={phrasioId}
+              campaign={campaign}
               trackingLabel={tooltip_link_clicked}
-            />
+            />) : ""}
           </Stack>
         </CardBox>
-        <Divider />
+        {customBranding === 'no' ? (<><Divider />
         <CardBox>
           <Inline vAlignItems="center" alignItems="spaceBetween">
             <TooltipLogo />
@@ -70,18 +66,18 @@ const TooltipContent = ({ phrasioId, locale, theme, title, etymology, descriptio
               target="_blank"
               rel="noopener noreferrer"
             >
-              {browser.i18n.getMessage('Send_feedback')}
+              {locale === 'de' ? "Feedback senden" : "Send feedback"}
             </Link>
           </Inline>
-        </CardBox>
+        </CardBox></>) : ''}
       </Card>
     </div>
   )
 }
 
-class Content extends HTMLElement {
+class AmbossPhrasio extends HTMLElement {
   static get observedAttributes() {
-    return ['data-phrasio-id', 'data-locale', 'data-theme']
+    return ['data-phrasio-id', 'data-locale', 'data-theme', 'data-campaign', 'data-custom-branding']
   }
 
   get phrasioId() {
@@ -96,25 +92,30 @@ class Content extends HTMLElement {
     return this.getAttribute('data-theme')
   }
 
+  get campaign() {
+    return this.getAttribute('data-campaign')
+  }
+
+  get customBranding() {
+    return this.getAttribute('data-custom-branding')
+  }
+
   constructor() {
     super()
     this.render = this.render.bind(this)
     this.attachShadow({ mode: 'open' })
+    loadFonts()
   }
 
   connectedCallback() {
     // todo: START: This is some very specific stuff re the ds and web-ext
-    const styleElem = document.createElement('link')
-    styleElem.setAttribute('rel', 'stylesheet')
-    getAssetSrc({ fileHash: '/annotate/content-custom-element.css' }).then((res) => styleElem.setAttribute('href', res))
-
     const DSStyleElem = document.createElement('style')
     const reg = /Card|Text|Inline|Icon|Divider|Box|Stack|Header|Link|Button/
     DSStyleElem.innerText = Array.from(document.getElementsByTagName('style')).reduce((acc, cur) => {
       if (!cur.innerText) return acc
       return reg.test(cur.innerText.substring(0, 20)) ? `${acc} ${cur.innerText.split('\n')[0]}` : acc
     }, '')
-    this.shadowRoot.appendChild(styleElem)
+    DSStyleElem.innerText = DSStyleElem.innerText + styles.replace(/\n/, '')
     this.shadowRoot.appendChild(DSStyleElem)
     // END
   }
@@ -127,12 +128,12 @@ class Content extends HTMLElement {
 
   render() {
     if (!this.locale || !this.phrasioId) {
-      console.warn(`in content-custom-element render method >> phrasioId: ${this.phrasioId} locale: ${this.locale}`)
+      console.warn(`in phrasio-custom-element render method >> phrasioId: ${this.phrasioId} locale: ${this.locale}`)
       return undefined
     }
-    // const { title, etymology, description, destinations } = getPhrasio(this.locale, this.phrasioId) || {}
+
     getPhrasio(this.locale, this.phrasioId).then((res) => {
-      const { title, etymology, description, destinations } = res || {}
+      const { title, etymology, description, destinations, phrasioId } = res || {}
       render(
         <>
           <div id="arrow" data-popper-arrow>
@@ -143,8 +144,10 @@ class Content extends HTMLElement {
             etymology={etymology}
             title={title}
             locale={this.locale}
-            phrasioId={this.phrasioId}
+            phrasioId={phrasioId}
             theme={this.theme}
+            campaign={this.campaign}
+            customBranding={this.customBranding}
             description={description}
           />
         </>,
@@ -154,4 +157,4 @@ class Content extends HTMLElement {
   }
 }
 
-export default Content
+export {AmbossPhrasio}

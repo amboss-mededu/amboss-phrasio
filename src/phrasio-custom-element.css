@@ -77,14 +77,14 @@
     margin-top: -0.5rem;
 }
 
-/*:host-context([data-popper-placement^='right']) > #arrow > #buffer::before,*/
-/*:host-context([data-popper-placement^='left']) > #arrow > #buffer::before {*/
-/*    width: 1.5rem;*/
-/*    height: 140px;*/
-/*    margin-top: -70px;*/
-/*    margin-left: -0.8rem;*/
-/*}*/
+:host-context([data-popper-placement^='right']) > #arrow > #buffer::before,
+:host-context([data-popper-placement^='left']) > #arrow > #buffer::before {
+    width: 1.5rem;
+    height: 140px;
+    margin-top: -70px;
+    margin-left: -0.8rem;
+}
 
-/*:host-context([data-popper-placement^='left']) > #arrow > #buffer::before {*/
-/*    margin-left: 0;*/
-/*}*/
+:host-context([data-popper-placement^='left']) > #arrow > #buffer::before {
+    margin-left: 0;
+}

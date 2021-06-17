@@ -1,2 +1,2 @@
-import AmbossPhrasio from './content-custom-element'
+import {AmbossPhrasio} from './phrasio-custom-element'
 export {AmbossPhrasio}
