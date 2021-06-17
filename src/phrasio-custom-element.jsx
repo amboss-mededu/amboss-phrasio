@@ -6,7 +6,7 @@ import { FEEDBACK_URL_DE, FEEDBACK_URL_EN } from './config'
 import { tooltip_link_clicked } from './event-names'
 import styles from './phrasio-custom-element.css'
 
-export function Destinations({ destinations = [], title, locale, phrasioId, trackingLabel, campaign }) {
+const Destinations = ({ destinations = [], title, locale, phrasioId, trackingLabel, campaign }) => {
   if (!destinations.length) return ''
   return (
     <Stack space="xs">
@@ -157,4 +157,4 @@ class AmbossPhrasio extends HTMLElement {
   }
 }
 
-export {AmbossPhrasio}
+export default AmbossPhrasio

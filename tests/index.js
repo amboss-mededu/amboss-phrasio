@@ -1,4 +1,4 @@
-import {AmbossPhrasio} from '../src'
+import {AmbossPhrasio} from '../dist/amboss-phrasio.es.js'
 import mockTermsEn from './mocks/terms_us_en.json'
 import mockTermsDe from './mocks/terms_de_de.json'
 import {mockPhrasioDe, mockPhrasioEn} from './mocks'
@@ -61,4 +61,5 @@ const adaptor = async (message, locale, token) => {
 }
 window.adaptor = adaptor
 }
+
 init()
