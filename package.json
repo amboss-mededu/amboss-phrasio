@@ -1,30 +1,30 @@
 {
-  "name": "@amboss-mededu/amboss-annotate",
-  "version": "0.0.6",
-  "description": "DOM annotation",
+  "name": "@amboss-mededu/amboss-phrasio",
+  "version": "0.0.1",
+  "description": "Phrasio content for tooltips and glossaries",
   "author": "Alex Jeffcott",
   "license": "ISC",
   "lockfileVerion": 1,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/amboss-mededu/amboss-annotate.git"
+    "url": "git+https://github.com/amboss-mededu/amboss-phrasio.git"
   },
   "bugs": {
-    "url": "https://github.com/amboss-mededu/amboss-annotate/issues"
+    "url": "https://github.com/amboss-mededu/amboss-phrasio/issues"
   },
-  "homepage": "https://github.com/amboss-mededu/amboss-annotate#readme",
+  "homepage": "https://github.com/amboss-mededu/amboss-phrasio#readme",
   "workspaces": [
     "./packages/*"
   ],
   "files": [
     "dist"
   ],
-  "main": "./dist/amboss-annotate.umd.js",
-  "module": "./dist/amboss-annotate.es.js",
+  "main": "./dist/amboss-phrasio.umd.js",
+  "module": "./dist/amboss-phrasio.es.js",
   "exports": {
     ".": {
-      "import": "./dist/amboss-annotate.es.js",
-      "require": "./dist/amboss-annotate.umd.js"
+      "import": "./dist/amboss-phrasio.es.js",
+      "require": "./dist/amboss-phrasio.umd.js"
     }
   },
   "publishConfig": {
@@ -47,11 +47,7 @@
     "vite": "^2.3.7"
   },
   "dependencies": {
-    "@amboss-mededu/amboss-annotate": "^0.0.7",
     "@amboss/design-system": "^0.13.1",
-    "@popperjs/core": "^2.9.2",
-    "fast-memoize": "^2.5.2",
-    "lodash.throttle": "^4.1.1",
     "preact": "^10.5.13"
   }
 }
