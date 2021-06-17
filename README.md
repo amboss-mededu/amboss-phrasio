@@ -11,4 +11,4 @@ npm run dev
 ```
 
 ## development
-pushes to the github npm registry on merge to master
+pushes to the github npm registry on merge to main
