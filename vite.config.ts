@@ -1,5 +1,4 @@
 const path = require('path')
-const fs = require('fs')
 import { defineConfig } from 'vite'
 import preact from '@preact/preset-vite'
 
@@ -13,10 +12,10 @@ export default defineConfig({
       entry: path.resolve(__dirname, 'src/index.js'),
       name: 'amboss-phrasio'
     },
-    rollupOptions: {
-      input: {
-        main: path.resolve(__dirname, 'index.html'),
-      },
-    }
+    // rollupOptions: {
+    //   input: {
+    //     main: path.resolve(__dirname, 'index.html'),
+    //   },
+    // }
   }
 })
