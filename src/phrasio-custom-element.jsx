@@ -138,6 +138,10 @@ class AmbossPhrasio extends HTMLElement {
     getPhrasio(this.phrasioId).then((res) => {
       const { title, etymology, description, destinations, phrasioId } = res || {}
       render(
+        <>
+          <div id="amboss-annotation-arrow" data-popper-arrow>
+            <div id="buffer"></div>
+          </div>
           <TooltipContent
             destinations={destinations}
             etymology={etymology}
@@ -149,7 +153,8 @@ class AmbossPhrasio extends HTMLElement {
             customBranding={this.customBranding}
             withLinks={this.withLinks}
             description={description}
-          />,
+          />
+        </>,
         this.shadowRoot
       )
     })

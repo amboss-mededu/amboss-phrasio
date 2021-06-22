@@ -25,7 +25,7 @@
     height: auto;
 }
 
-:host-context([show-popper]) > #arrow::before {
+:host-context([show-popper]) > #amboss-annotation-arrow::before {
     content: '';
     visibility: visible;
     transform: rotate(45deg);
@@ -39,32 +39,32 @@
     fill: #fff;
 }
 
-:host-context([data-theme='dark-theme']) > #arrow::before {
+:host-context([data-theme='dark-theme']) > #amboss-annotation-arrow::before {
     background-color: #24282d;
 }
 
-:host-context([data-popper-placement^='top']) > #arrow {
+:host-context([data-popper-placement^='top']) > #amboss-annotation-arrow {
     bottom: 5px;
 }
 
-:host-context([data-popper-placement^='bottom']) > #arrow {
+:host-context([data-popper-placement^='bottom']) > #amboss-annotation-arrow {
     top: -5px;
 }
 
-:host-context([show-popper]) > #arrow > #buffer::before {
+:host-context([show-popper]) > #amboss-annotation-arrow > #buffer::before {
     content: '';
     position: absolute;
     background-color: transparent;
 }
 
-:host-context([data-popper-placement^='bottom']) > #arrow > #buffer::before,
-:host-context([data-popper-placement^='top']) > #arrow > #buffer::before {
+:host-context([data-popper-placement^='bottom']) > #amboss-annotation-arrow > #buffer::before,
+:host-context([data-popper-placement^='top']) > #amboss-annotation-arrow > #buffer::before {
     width: 240px;
     height: 1.5rem;
     margin-left: -120px;
     margin-top: -0.5rem;
 }
 
-:host-context([data-popper-placement^='top']) > #arrow > #buffer::before {
+:host-context([data-popper-placement^='top']) > #amboss-annotation-arrow > #buffer::before {
     margin-top: -0.5rem;
 }
