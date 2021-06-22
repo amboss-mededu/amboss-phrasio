@@ -38,14 +38,14 @@ const Destinations = ({ destinations = [], title, locale, phrasioId, trackingLab
   )
 }
 
-const TooltipContent = ({ phrasioId, locale, theme, title, etymology, description, destinations, campaign, customBranding }) => {
+const TooltipContent = ({ phrasioId, locale, theme, title, etymology, description, destinations, campaign, customBranding, withLinks }) => {
   return (
     <div id="content" className={theme}>
       <Card key={title} title={title} subtitle={etymology ? etymology : ''}>
         <CardBox>
           <Stack space="xs">
             {description ? <Text>{description}</Text> : ''}
-            {customBranding === 'no' ? (<Destinations
+            {withLinks !== 'no' ? (<Destinations
               destinations={destinations}
               locale={locale}
               title={title}
@@ -55,7 +55,7 @@ const TooltipContent = ({ phrasioId, locale, theme, title, etymology, descriptio
             />) : ""}
           </Stack>
         </CardBox>
-        {customBranding === 'no' ? (<><Divider />
+        {customBranding !== 'yes' ? (<><Divider />
         <CardBox>
           <Inline vAlignItems="center" alignItems="spaceBetween">
             <TooltipLogo />
@@ -77,7 +77,7 @@ const TooltipContent = ({ phrasioId, locale, theme, title, etymology, descriptio
 
 class AmbossPhrasio extends HTMLElement {
   static get observedAttributes() {
-    return ['data-phrasio-id', 'data-locale', 'data-theme', 'data-campaign', 'data-custom-branding']
+    return ['data-phrasio-id', 'data-locale', 'data-theme', 'data-campaign', 'data-custom-branding', 'data-with-links']
   }
 
   get phrasioId() {
@@ -100,9 +100,12 @@ class AmbossPhrasio extends HTMLElement {
     return this.getAttribute('data-custom-branding')
   }
 
+  get withLinks() {
+    return this.getAttribute('data-with-links')
+  }
+
   constructor() {
     super()
-    this.render = this.render.bind(this)
     this.attachShadow({ mode: 'open' })
     loadFonts()
   }
@@ -132,13 +135,9 @@ class AmbossPhrasio extends HTMLElement {
       return undefined
     }
 
-    getPhrasio(this.locale, this.phrasioId).then((res) => {
+    getPhrasio(this.phrasioId).then((res) => {
       const { title, etymology, description, destinations, phrasioId } = res || {}
       render(
-        <>
-          <div id="arrow" data-popper-arrow>
-            <div id="buffer"></div>
-          </div>
           <TooltipContent
             destinations={destinations}
             etymology={etymology}
@@ -148,9 +147,9 @@ class AmbossPhrasio extends HTMLElement {
             theme={this.theme}
             campaign={this.campaign}
             customBranding={this.customBranding}
+            withLinks={this.withLinks}
             description={description}
-          />
-        </>,
+          />,
         this.shadowRoot
       )
     })

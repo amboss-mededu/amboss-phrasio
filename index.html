@@ -14,15 +14,27 @@
     ambossScript.addEventListener('load', function() {
         if (window.adaptor) {
             const app = document.getElementById('app')
-            app.innerHTML = `<amboss-phrasio
+            app.innerHTML = `<div>
+            <amboss-phrasio
                 data-phrasio-id="test"
-                data-locale="en"
-                data-annotation-variant="underline"
+                data-locale="us"
                 data-theme="light-theme"
                 data-campaign=""
                 data-custom-branding="no"
+                data-with-links="yes"
                 show-popper
-            />`
+            ></amboss-phrasio>
+            <br/>
+            <amboss-phrasio
+                data-phrasio-id="test"
+                data-locale="us"
+                data-theme="light-theme"
+                data-campaign=""
+                data-custom-branding="no"
+                data-with-links="no"
+                show-popper
+            ></amboss-phrasio>
+            </div>`
         }
     });
 </script>
