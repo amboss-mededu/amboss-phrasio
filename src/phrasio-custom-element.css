@@ -1,4 +1,4 @@
-:host-context(amboss-content) {
+:host-context(amboss-annotation-content) {
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12), 0 32px 112px rgba(0, 0, 0, 0.24);
     border-radius: 12px;
     color: initial;
@@ -15,7 +15,7 @@
     height: auto;
 }
 
-:host-context(amboss-content) > #content {
+:host-context(amboss-annotation-content) > #content {
     display: none;
     height: 0;
 }
