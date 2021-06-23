@@ -3,29 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script id="amboss-phrasio" type="module" crossorigin src="./tests/index.js"></script>
+    <script id="amboss-annotation-content" type="module" crossorigin src="./tests/index.js"></script>
 <!--    <script id="amboss-phrasio" type="module" crossorigin src="./tests/index.js"></script>-->
 </head>
 <body>
 <div id="app"></div>
 
 <script type="text/javascript">
-    const ambossScript = document.querySelector('#amboss-phrasio');
+    const ambossScript = document.querySelector('#amboss-annotation-content');
     ambossScript.addEventListener('load', function() {
         if (window.adaptor) {
             const app = document.getElementById('app')
             app.innerHTML = `<div>
-            <amboss-phrasio
+            <amboss-annotation-content
                 data-phrasio-id="test"
                 data-locale="us"
                 data-theme="light-theme"
                 data-campaign=""
                 data-custom-branding="no"
                 data-with-links="yes"
-                show-popper
-            ></amboss-phrasio>
+            ></amboss-annotation-content>
             <br/>
-            <amboss-phrasio
+            <amboss-annotation-content
                 data-phrasio-id="test"
                 data-locale="us"
                 data-theme="light-theme"
@@ -33,7 +32,7 @@
                 data-custom-branding="no"
                 data-with-links="no"
                 show-popper
-            ></amboss-phrasio>
+            ></amboss-annotation-content>
             </div>`
         }
     });

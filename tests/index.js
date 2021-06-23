@@ -4,7 +4,7 @@ import mockTermsDe from './mocks/terms_de_de.json'
 import {mockPhrasioDe, mockPhrasioEn} from './mocks'
 import {BASE_URL_NEXT} from '../src/config'
 
-window.customElements.define('amboss-phrasio', AmbossPhrasio)
+window.customElements.define('amboss-annotation-content', AmbossPhrasio)
 
 const opts = {}
 
