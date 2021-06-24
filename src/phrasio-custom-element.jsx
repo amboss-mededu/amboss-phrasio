@@ -169,10 +169,6 @@ class AmbossPhrasio extends HTMLElement {
       "data-phrasio-id",
       "data-locale",
       "data-theme",
-      "data-campaign",
-      "data-custom-branding",
-      "data-with-links",
-      "data-variant",
     ];
   }
 
@@ -228,7 +224,7 @@ class AmbossPhrasio extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue !== newValue && this.locale && this.phrasioId) {
+    if (oldValue !== newValue) {
       this.render();
     }
   }
