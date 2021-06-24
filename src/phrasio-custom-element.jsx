@@ -1,17 +1,16 @@
 import { render } from 'preact'
 import { Icon, Card, Stack, CardBox, Divider, Inline, Link, Text } from '@amboss/design-system'
-import { getHref, track, getPhrasio, loadFonts } from './utils'
+import { track, getPhrasio, loadFonts } from './utils'
 import TooltipLogo from './TooltipLogo'
 import { FEEDBACK_URL_DE, FEEDBACK_URL_EN } from './config'
 import { tooltip_link_clicked } from './event-names'
 import styles from './phrasio-custom-element.css'
 
-const Destinations = ({ destinations = [], title, locale, phrasioId, trackingLabel, campaign }) => {
+const Destinations = ({ destinations = [], phrasioId, trackingLabel }) => {
   if (!destinations.length) return ''
   return (
     <Stack space="xs">
-      {destinations.map(({ label, particleEid, articleEid }) => {
-        const href = getHref({ particleEid, label, articleEid, title, locale, campaign })
+      {destinations.map(({ label, href }) => {
         function handleLinkClick(e) {
           track(trackingLabel, {
             phrasioId,
@@ -19,7 +18,7 @@ const Destinations = ({ destinations = [], title, locale, phrasioId, trackingLab
           })
         }
         return (
-          <Inline key={articleEid} space="s" noWrap vAlignItems="center">
+          <Inline key={label} space="s" noWrap vAlignItems="center">
             <Icon name="article" variant="primary" />
             <Link
               href={href}
@@ -38,19 +37,16 @@ const Destinations = ({ destinations = [], title, locale, phrasioId, trackingLab
   )
 }
 
-const TooltipContent = ({ phrasioId, locale, theme, title, etymology, description, destinations, campaign, customBranding, withLinks }) => {
+const TooltipContent = ({ phrasioId, locale, theme, title, subtitle, body, destinations, customBranding, withLinks }) => {
   return (
     <div id="content" className={theme}>
-      <Card key={title} title={title} subtitle={etymology ? etymology : ''}>
+      <Card key={title} title={title} subtitle={subtitle=''}>
         <CardBox>
           <Stack space="xs">
-            {description ? <Text>{description}</Text> : ''}
+            {body ? <Text>{body}</Text> : ''}
             {withLinks !== 'no' ? (<Destinations
               destinations={destinations}
-              locale={locale}
-              title={title}
               phrasioId={phrasioId}
-              campaign={campaign}
               trackingLabel={tooltip_link_clicked}
             />) : ""}
           </Stack>
@@ -136,23 +132,24 @@ class AmbossPhrasio extends HTMLElement {
     }
 
     getPhrasio(this.phrasioId).then((res) => {
-      const { title, etymology, description, destinations, phrasioId } = res || {}
+      const { title, subtitle, body, destinations, phrasioId } = res || {}
       render(
         <>
           <div id="amboss-annotation-arrow" data-popper-arrow>
             <div id="buffer"></div>
           </div>
           <TooltipContent
-            destinations={destinations}
-            etymology={etymology}
-            title={title}
-            locale={this.locale}
             phrasioId={phrasioId}
+            title={title}
+            subtitle={subtitle}
+            body={body}
+            media={media}
+            destinations={destinations}
+            locale={this.locale}
             theme={this.theme}
             campaign={this.campaign}
             customBranding={this.customBranding}
             withLinks={this.withLinks}
-            description={description}
           />
         </>,
         this.shadowRoot

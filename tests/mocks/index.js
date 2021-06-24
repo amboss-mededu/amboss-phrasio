@@ -11,7 +11,25 @@ export const mockPhrasioEn = {
                 }
             ],
             "title": "Creatinine clearance",
-            "translation": "Abbreviation: CrCl"
+            "translation": "Abbreviation: CrCl",
+            "media": [
+                {
+                    "title": "Diabetes mellitus diagnosis",
+                    "eid": "qLYCAp",
+                    "canonicalUrl": "https:\/\/media-us.amboss.com\/media\/thumbs\/big_58905711861d9.jpg",
+                    "copyright": {
+                        "html": "© AMBOSS"
+                    }
+                },
+                {
+                    "title": "Diabetes mellitus type 2 fact sheet",
+                    "eid": "C5bqm8",
+                    "canonicalUrl": "https:\/\/media-us.amboss.com\/media\/thumbs\/big_5f47b80b25dc9.jpg",
+                    "copyright": {
+                        "html": "© AMBOSS"
+                    }
+                }
+            ]
         }
     }
 }
@@ -28,7 +46,25 @@ export const mockPhrasioDe = {
                 }
             ],
             "title": "ACE",
-            "translation": ""
+            "translation": "",
+            "media": [
+                {
+                    "title": "Diabetes mellitus diagnosis",
+                    "eid": "qLYCAp",
+                    "canonicalUrl": "https:\/\/media-us.amboss.com\/media\/thumbs\/big_58905711861d9.jpg",
+                    "copyright": {
+                        "html": "© AMBOSS"
+                    }
+                },
+                {
+                    "title": "Diabetes mellitus type 2 fact sheet",
+                    "eid": "C5bqm8",
+                    "canonicalUrl": "https:\/\/media-us.amboss.com\/media\/thumbs\/big_5f47b80b25dc9.jpg",
+                    "copyright": {
+                        "html": "© AMBOSS"
+                    }
+                }
+            ]
         }
     }
 }
