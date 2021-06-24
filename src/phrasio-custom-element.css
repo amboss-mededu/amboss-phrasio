@@ -16,16 +16,12 @@
 }
 
 :host-context(amboss-annotation-content[data-variant='tooltip']) #content {
-    display: none;
-    height: 0;
     opacity: 0;
 }
 
-:host-context([data-variant='tooltip'][show-popper]) #content {
-    display: block;
-    height: auto;
+:host-context(amboss-annotation-content[data-variant='tooltip'][show-popper]) #content {
     opacity: 1;
-    transition: opacity 0.6s;
+    transition: all 0.6s;
 }
 
 :host-context([data-variant='tooltip'][show-popper]) > #amboss-annotation-arrow::before {
