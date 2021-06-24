@@ -1,4 +1,4 @@
-:host-context(amboss-annotation-content) {
+:host-context(amboss-annotation-content[data-variant='tooltip']) {
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12), 0 32px 112px rgba(0, 0, 0, 0.24);
     border-radius: 12px;
     color: initial;
@@ -7,7 +7,7 @@
     height: 0;
 }
 
-:host-context([show-popper]) {
+:host-context([data-variant='tooltip'][show-popper]) {
     visibility: visible;
     pointer-events: auto;
     z-index: 9999;
@@ -15,17 +15,17 @@
     height: auto;
 }
 
-:host-context(amboss-annotation-content) #content {
+:host-context(amboss-annotation-content[data-variant='tooltip']) #content {
     display: none;
     height: 0;
 }
 
-:host-context([show-popper]) #content {
+:host-context([data-variant='tooltip'][show-popper]) #content {
     display: block;
     height: auto;
 }
 
-:host-context([show-popper]) > #amboss-annotation-arrow::before {
+:host-context([data-variant='tooltip'][show-popper]) > #amboss-annotation-arrow::before {
     content: '';
     visibility: visible;
     transform: rotate(45deg);
@@ -35,36 +35,36 @@
     background-color: #fff;
 }
 
-:host-context([data-theme='dark-theme']) svg.tooltip-logo .black {
+:host-context([data-variant='tooltip'][data-theme='dark-theme']) svg.tooltip-logo .black {
     fill: #fff;
 }
 
-:host-context([data-theme='dark-theme']) > #amboss-annotation-arrow::before {
+:host-context([data-variant='tooltip'][data-theme='dark-theme']) > #amboss-annotation-arrow::before {
     background-color: #24282d;
 }
 
-:host-context([data-popper-placement^='top']) > #amboss-annotation-arrow {
+:host-context([data-variant='tooltip'][data-popper-placement^='top']) > #amboss-annotation-arrow {
     bottom: 5px;
 }
 
-:host-context([data-popper-placement^='bottom']) > #amboss-annotation-arrow {
+:host-context([data-variant='tooltip'][data-popper-placement^='bottom']) > #amboss-annotation-arrow {
     top: -5px;
 }
 
-:host-context([show-popper]) > #amboss-annotation-arrow > #buffer::before {
+:host-context([data-variant='tooltip'][show-popper]) > #amboss-annotation-arrow > #buffer::before {
     content: '';
     position: absolute;
     background-color: transparent;
 }
 
-:host-context([data-popper-placement^='bottom']) > #amboss-annotation-arrow > #buffer::before,
-:host-context([data-popper-placement^='top']) > #amboss-annotation-arrow > #buffer::before {
+:host-context([data-variant='tooltip'][data-popper-placement^='bottom']) > #amboss-annotation-arrow > #buffer::before,
+:host-context([data-variant='tooltip'][data-popper-placement^='top']) > #amboss-annotation-arrow > #buffer::before {
     width: 240px;
     height: 1.5rem;
     margin-left: -120px;
     margin-top: -0.5rem;
 }
 
-:host-context([data-popper-placement^='top']) > #amboss-annotation-arrow > #buffer::before {
+:host-context([data-variant='tooltip'][data-popper-placement^='top']) > #amboss-annotation-arrow > #buffer::before {
     margin-top: -0.5rem;
 }
