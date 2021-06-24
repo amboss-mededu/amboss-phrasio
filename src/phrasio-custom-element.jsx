@@ -8,7 +8,7 @@ import styles from './phrasio-custom-element.css'
 import {useEffect} from 'preact/hooks'
 
 const TooltipContent = ({ phrasioId, locale, theme, title, subtitle='', body, destinations=[], media=[], customBranding, withLinks }) => {
-  useEffect(() => {console.log('phrase', phrasioId)}, [phrasioId])
+  console.log('phrase', phrasioId)
   return (
     <div id="content" className={theme}>
       <Card key={title} title={phrasioId ? title : ''} subtitle={phrasioId ? subtitle : ''}>
@@ -172,6 +172,7 @@ class AmbossPhrasio extends HTMLElement {
   }
 
   render() {
+    console.log(`!! this.phrasioId in render =>> `, this.phrasioId)
     if (!this.locale || !this.phrasioId) {
       console.warn(`in phrasio-custom-element render method >> phrasioId: ${this.phrasioId} locale: ${this.locale}`)
       return undefined
@@ -181,27 +182,51 @@ class AmbossPhrasio extends HTMLElement {
       const { title, subtitle, body, destinations, media, phrasioId } = res || {}
 
       if (this.variant === 'tooltip') {
-        render(
-          <>
-            <div id="amboss-annotation-arrow" data-popper-arrow>
-              <div id="buffer"></div>
-            </div>
-            <TooltipContent
-              phrasioId={phrasioId}
-              title={title}
-              subtitle={subtitle}
-              body={body}
-              media={media}
-              destinations={destinations}
-              locale={this.locale}
-              theme={this.theme}
-              campaign={this.campaign}
-              customBranding={this.customBranding}
-              withLinks={this.withLinks}
-            />
-          </>,
-          this.shadowRoot
-        )
+        if (this.phrasioId) {
+          render(
+            <>
+              <div id="amboss-annotation-arrow" data-popper-arrow>
+                <div id="buffer"></div>
+              </div>
+              <TooltipContent
+                phrasioId={phrasioId}
+                title={title}
+                subtitle={subtitle}
+                body={body}
+                media={media}
+                destinations={destinations}
+                locale={this.locale}
+                theme={this.theme}
+                campaign={this.campaign}
+                customBranding={this.customBranding}
+                withLinks={this.withLinks}
+              />
+            </>,
+            this.shadowRoot
+          )
+        } else {
+          render(
+              <>
+                <div id="amboss-annotation-arrow" data-popper-arrow>
+                  <div id="buffer"></div>
+                </div>
+                <TooltipContent
+                    phrasioId={''}
+                    title={''}
+                    subtitle={''}
+                    body={''}
+                    media={[]}
+                    destinations={[]}
+                    locale={this.locale}
+                    theme={this.theme}
+                    campaign={this.campaign}
+                    customBranding={this.customBranding}
+                    withLinks={this.withLinks}
+                />
+              </>,
+              this.shadowRoot
+          )
+        }
       }
       if (this.variant === 'glossary') {
       render(
