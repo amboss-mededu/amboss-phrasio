@@ -1,54 +1,44 @@
 import { render } from 'preact'
-import { Icon, Card, Stack, CardBox, Divider, Inline, Link, Text } from '@amboss/design-system'
+import { Icon, Card, Stack, CardBox, Divider, Inline, Link, Text, Box, H5, H6 } from '@amboss/design-system'
 import { track, getPhrasio, loadFonts } from './utils'
 import TooltipLogo from './TooltipLogo'
 import { FEEDBACK_URL_DE, FEEDBACK_URL_EN } from './config'
-import { tooltip_link_clicked } from './event-names'
+import {glossary_link_clicked, tooltip_link_clicked} from './event-names'
 import styles from './phrasio-custom-element.css'
 
-const Destinations = ({ destinations = [], phrasioId, trackingLabel }) => {
-  if (!destinations.length) return ''
-  return (
-    <Stack space="xs">
-      {destinations.map(({ label, href }) => {
-        function handleLinkClick(e) {
-          track(trackingLabel, {
-            phrasioId,
-            label,
-          })
-        }
-        return (
-          <Inline key={label} space="s" noWrap vAlignItems="center">
-            <Icon name="article" variant="primary" />
-            <Link
-              href={href}
-              variant="primary"
-              size="l"
-              onClick={handleLinkClick}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {label}
-            </Link>
-          </Inline>
-        )
-      })}
-    </Stack>
-  )
-}
-
-const TooltipContent = ({ phrasioId, locale, theme, title, subtitle, body, destinations, customBranding, withLinks }) => {
+const TooltipContent = ({ phrasioId, locale, theme, title, subtitle='', body, destinations=[], media=[], customBranding, withLinks }) => {
   return (
     <div id="content" className={theme}>
-      <Card key={title} title={title} subtitle={subtitle=''}>
+      <Card key={title} title={title} subtitle={subtitle}>
         <CardBox>
           <Stack space="xs">
             {body ? <Text>{body}</Text> : ''}
-            {withLinks !== 'no' ? (<Destinations
-              destinations={destinations}
-              phrasioId={phrasioId}
-              trackingLabel={tooltip_link_clicked}
-            />) : ""}
+            {withLinks !== 'no' && destinations.length > 0 ? (
+                    <Stack space="xs">
+                      {destinations.map(({ label, href }) => {
+                        function handleLinkClick(e) {
+                          track(tooltip_link_clicked, {
+                            phrasioId,
+                            label,
+                          })
+                        }
+                        return (
+                            <Inline key={label} space="s" noWrap vAlignItems="center">
+                              <Icon name="article" variant="primary" />
+                              <Link
+                                  href={href}
+                                  variant="primary"
+                                  size="l"
+                                  onClick={handleLinkClick}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                              >
+                                {label}
+                              </Link>
+                            </Inline>
+                        )
+                      })}
+                    </Stack>) : ""}
           </Stack>
         </CardBox>
         {customBranding !== 'yes' ? (<><Divider />
@@ -71,9 +61,59 @@ const TooltipContent = ({ phrasioId, locale, theme, title, subtitle, body, desti
   )
 }
 
+export function GlossaryContent({ phrasioId, locale, theme, title, subtitle='', body, destinations=[], media=[], customBranding, withLinks }) {
+  return (
+        <Box space="s">
+          <H5>{title}</H5>
+          {subtitle ? (
+              <Box space="zero" vSpace="xxs">
+                <H6>{subtitle}</H6>
+              </Box>
+          ) : (
+              ''
+          )}
+          {body ? (
+              <Box space="zero" vSpace="xs">
+                <Text>{body}</Text>
+              </Box>
+          ) : (
+              ''
+          )}
+          {withLinks !== 'no' && destinations.length > 0 ? (
+              <Stack space="zero">
+                {destinations.map(({ label, href }, i) => {
+                  function handleLinkClick(e) {
+                    track(glossary_link_clicked, {
+                      phrasioId,
+                      label,
+                    })
+                  }
+                  return (
+                      <Box key={label} space="zero" vSpace="xs">
+                        <Inline space="s" noWrap vAlignItems="center">
+                          <Icon name="article" variant="primary" />
+                          <Link
+                              href={href}
+                              variant="primary"
+                              size="l"
+                              onClick={handleLinkClick}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                          >
+                            {label}
+                          </Link>
+                        </Inline>
+                      </Box>
+                  )
+                })}
+              </Stack>) : ""}
+        </Box>
+  )
+}
+
 class AmbossPhrasio extends HTMLElement {
   static get observedAttributes() {
-    return ['data-phrasio-id', 'data-locale', 'data-theme', 'data-campaign', 'data-custom-branding', 'data-with-links']
+    return ['data-phrasio-id', 'data-locale', 'data-theme', 'data-campaign', 'data-custom-branding', 'data-with-links', 'data-variant']
   }
 
   get phrasioId() {
@@ -98,6 +138,10 @@ class AmbossPhrasio extends HTMLElement {
 
   get withLinks() {
     return this.getAttribute('data-with-links')
+  }
+
+  get variant() {
+    return this.getAttribute('data-variant')
   }
 
   constructor() {
@@ -133,6 +177,8 @@ class AmbossPhrasio extends HTMLElement {
 
     getPhrasio(this.phrasioId).then((res) => {
       const { title, subtitle, body, destinations, media, phrasioId } = res || {}
+
+      if (this.variant === 'tooltip') {
       render(
         <>
           <div id="amboss-annotation-arrow" data-popper-arrow>
@@ -153,7 +199,24 @@ class AmbossPhrasio extends HTMLElement {
           />
         </>,
         this.shadowRoot
-      )
+      )}
+      if (this.variant === 'glossary') {
+      render(
+            <GlossaryContent
+                phrasioId={phrasioId}
+                title={title}
+                subtitle={subtitle}
+                body={body}
+                media={media}
+                destinations={destinations}
+                locale={this.locale}
+                theme={this.theme}
+                campaign={this.campaign}
+                customBranding={this.customBranding}
+                withLinks={this.withLinks}
+            />,
+          this.shadowRoot
+      )}
     })
   }
 }
