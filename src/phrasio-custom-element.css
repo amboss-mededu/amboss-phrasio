@@ -15,14 +15,17 @@
     height: auto;
 }
 
-:host-context(amboss-annotation-content[data-variant='tooltip']) #content {
-    display: none;
-    height: 0;
-}
-
-:host-context([data-variant='tooltip'][show-popper]) #content {
+:host-context([data-variant='tooltip'][show-popper][data-phrasioId]) #content {
     display: block;
     height: auto;
+    opacity: 1;
+    transition: opacity 0.6s;
+}
+
+:host-context(amboss-annotation-content[data-variant='tooltip'][data-phrasioId=""]) #content {
+    display: none;
+    height: 0;
+    opacity: 0;
 }
 
 :host-context([data-variant='tooltip'][show-popper]) > #amboss-annotation-arrow::before {
