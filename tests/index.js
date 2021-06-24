@@ -8,7 +8,7 @@ window.customElements.define('amboss-annotation-content', AmbossPhrasio)
 
 const opts = {}
 
-function generateHref({ anchor, particleEid, articleEid, title, locale, campaign, source='partner-sdk', medium='website' }) {
+function generateHref({ particleEid, articleEid, title, locale, campaign, source='partner-sdk', medium='website' }) {
     const replaceSpacesWithUnderscores = (str) => str.replace(/ /g, '_')
     const urlify = (str) => encodeURIComponent(replaceSpacesWithUnderscores(str)).replace(/[!'()*]/g, (c) => '%' + c.charCodeAt(0).toString(16))
     const utmString = `?utm_campaign=${campaign}&utm_source=${source}&utm_medium=${medium}&utm_term=${urlify(title)}`
@@ -87,19 +87,17 @@ const annotationOpts = {
     },
 }
 
-window.adaptor = ({subject, locale=annotationOpts.locale, token=annotationOpts.token, id, trackingProperties, hrefProperties}) => {
+window.adaptor = ({subject, locale=annotationOpts.locale, token=annotationOpts.token, id, trackingProperties }) => {
     switch (subject) {
         case 'track': {
             return annotationOpts.adaptorMethods.track(trackingProperties)
         }
         case 'getTerms': {
-            return annotationOpts.adaptorMethods.getTerms(locale, token)
+            return annotationOpts.adaptorMethods.getTerms(locale, token).then((res) => new Map(Object.entries(res)));
+            // you cannot get a map via the background script so get the array of tuples and create the map here
         }
         case 'getTooltipContent': {
             return annotationOpts.adaptorMethods.getTooltipContent(locale, token, id)
-        }
-        case 'generateHref': {
-            return annotationOpts.adaptorMethods.generateHref({...hrefProperties, locale})
         }
         default:
             throw new Error('Message requires message.subject')
