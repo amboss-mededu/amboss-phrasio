@@ -132,7 +132,7 @@ class AmbossPhrasio extends HTMLElement {
     }
 
     getPhrasio(this.phrasioId).then((res) => {
-      const { title, subtitle, body, destinations, phrasioId } = res || {}
+      const { title, subtitle, body, destinations, media, phrasioId } = res || {}
       render(
         <>
           <div id="amboss-annotation-arrow" data-popper-arrow>
