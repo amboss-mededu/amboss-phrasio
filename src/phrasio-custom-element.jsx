@@ -17,7 +17,6 @@ import TooltipLogo from "./TooltipLogo";
 import { FEEDBACK_URL_DE, FEEDBACK_URL_EN } from "./config";
 import { glossary_link_clicked, tooltip_link_clicked } from "./event-names";
 import styles from "./phrasio-custom-element.css";
-import { useEffect } from "preact/hooks";
 
 const TooltipContent = ({
   phrasioId,
@@ -31,7 +30,6 @@ const TooltipContent = ({
   customBranding,
   withLinks,
 }) => {
-  console.log("phrase", phrasioId);
   return (
     <div id="content" className={theme}>
       <Card
@@ -101,14 +99,11 @@ const TooltipContent = ({
 
 export function GlossaryContent({
   phrasioId,
-  locale,
-  theme,
   title,
   subtitle = "",
   body,
   destinations = [],
   media = [],
-  customBranding = "no",
   withLinks = "yes",
 }) {
   return (
@@ -233,7 +228,7 @@ class AmbossPhrasio extends HTMLElement {
 
   render() {
     getPhrasio(this.phrasioId).then((res) => {
-      const { title, subtitle, body, destinations, media, phrasioId } =
+      const { title, subtitle, body, destinations, media } =
         res || {};
 
       if (this.variant === "tooltip") {
@@ -269,10 +264,7 @@ class AmbossPhrasio extends HTMLElement {
             body={body}
             media={media}
             destinations={destinations}
-            locale={this.locale}
             theme={this.theme}
-            campaign={this.campaign}
-            customBranding={this.customBranding}
             withLinks={this.withLinks}
           />,
           this.shadowRoot
