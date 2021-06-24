@@ -66,21 +66,8 @@ const adaptorMethods = {
     getTooltipContent: async (locale, token, id) => {
         // const phrasio = await fetchPhrasioFromApi(locale, token, id)
         const phrasio = await locale === 'de' ? mockPhrasioDe : mockPhrasioEn
-        console.log(`!! getTooltipContent =>`, phrasio)
         const normalisedPhrasio = await normaliseRawPhrasio(phrasio, locale, '')
         return normalisedPhrasio
-        // const title = phrasio?.data?.phraseGroup.title
-        // const description = phrasio?.data?.phraseGroup.abstract
-        // const etymology = phrasio?.data?.phraseGroup.translation
-        // const destinations = phrasio?.data?.phraseGroup.destinations
-        // const phrasioId = phrasio?.data?.phraseGroup.eid
-        // return {
-        //     title,
-        //     description,
-        //     etymology,
-        //     destinations,
-        //     phrasioId
-        // }
     }
 }
 

@@ -9,11 +9,11 @@ import styles from './phrasio-custom-element.css'
 const TooltipContent = ({ phrasioId, locale, theme, title, subtitle='', body, destinations=[], media=[], customBranding, withLinks }) => {
   return (
     <div id="content" className={theme}>
-      <Card key={title} title={title} subtitle={subtitle}>
+      <Card key={title} title={phrasioId ? title : ''} subtitle={phrasioId ? subtitle : ''}>
         <CardBox>
           <Stack space="xs">
-            {body ? <Text>{body}</Text> : ''}
-            {withLinks !== 'no' && destinations.length > 0 ? (
+            {phrasioId && body ? <Text>{body}</Text> : ''}
+            {withLinks !== 'no' && destinations.length && phrasioId > 0 ? (
                     <Stack space="xs">
                       {destinations.map(({ label, href }) => {
                         function handleLinkClick(e) {
@@ -61,7 +61,7 @@ const TooltipContent = ({ phrasioId, locale, theme, title, subtitle='', body, de
   )
 }
 
-export function GlossaryContent({ phrasioId, locale, theme, title, subtitle='', body, destinations=[], media=[], customBranding, withLinks }) {
+export function GlossaryContent({ phrasioId, locale, theme, title, subtitle='', body, destinations=[], media=[], customBranding='no', withLinks='yes' }) {
   return (
         <Box space="s">
           <H5>{title}</H5>
@@ -179,27 +179,28 @@ class AmbossPhrasio extends HTMLElement {
       const { title, subtitle, body, destinations, media, phrasioId } = res || {}
 
       if (this.variant === 'tooltip') {
-      render(
-        <>
-          <div id="amboss-annotation-arrow" data-popper-arrow>
-            <div id="buffer"></div>
-          </div>
-          <TooltipContent
-            phrasioId={phrasioId}
-            title={title}
-            subtitle={subtitle}
-            body={body}
-            media={media}
-            destinations={destinations}
-            locale={this.locale}
-            theme={this.theme}
-            campaign={this.campaign}
-            customBranding={this.customBranding}
-            withLinks={this.withLinks}
-          />
-        </>,
-        this.shadowRoot
-      )}
+        render(
+          <>
+            <div id="amboss-annotation-arrow" data-popper-arrow>
+              <div id="buffer"></div>
+            </div>
+            <TooltipContent
+              phrasioId={phrasioId}
+              title={title}
+              subtitle={subtitle}
+              body={body}
+              media={media}
+              destinations={destinations}
+              locale={this.locale}
+              theme={this.theme}
+              campaign={this.campaign}
+              customBranding={this.customBranding}
+              withLinks={this.withLinks}
+            />
+          </>,
+          this.shadowRoot
+        )
+      }
       if (this.variant === 'glossary') {
       render(
             <GlossaryContent
