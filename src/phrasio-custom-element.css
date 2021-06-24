@@ -17,7 +17,6 @@
 
 
 :host-context(amboss-annotation-content[data-variant='tooltip']) #content {
-    opacity: 0;
     color: #ffffff;
 }
 
@@ -26,9 +25,8 @@
 }
 
 :host-context(amboss-annotation-content[data-variant='tooltip'][show-popper]) #content {
-    opacity: 1;
     color: initial;
-    transition: all 0.2s 1s;
+    transition: all 0.2s;
 }
 
 :host-context([data-variant='tooltip'][show-popper]) > #amboss-annotation-arrow::before {

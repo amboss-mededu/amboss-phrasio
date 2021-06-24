@@ -166,13 +166,12 @@ class AmbossPhrasio extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue !== newValue) {
+    if (oldValue !== newValue && this.locale && this.phrasioId) {
       this.render()
     }
   }
 
   render() {
-    console.log(`!! this.phrasioId in render =>> `, this.phrasioId)
     if (!this.locale || !this.phrasioId) {
       console.warn(`in phrasio-custom-element render method >> phrasioId: ${this.phrasioId} locale: ${this.locale}`)
       return undefined
@@ -182,7 +181,6 @@ class AmbossPhrasio extends HTMLElement {
       const { title, subtitle, body, destinations, media, phrasioId } = res || {}
 
       if (this.variant === 'tooltip') {
-        if (this.phrasioId) {
           render(
             <>
               <div id="amboss-annotation-arrow" data-popper-arrow>
@@ -204,29 +202,6 @@ class AmbossPhrasio extends HTMLElement {
             </>,
             this.shadowRoot
           )
-        } else {
-          render(
-              <>
-                <div id="amboss-annotation-arrow" data-popper-arrow>
-                  <div id="buffer"></div>
-                </div>
-                <TooltipContent
-                    phrasioId={''}
-                    title={''}
-                    subtitle={''}
-                    body={''}
-                    media={[]}
-                    destinations={[]}
-                    locale={this.locale}
-                    theme={this.theme}
-                    campaign={this.campaign}
-                    customBranding={this.customBranding}
-                    withLinks={this.withLinks}
-                />
-              </>,
-              this.shadowRoot
-          )
-        }
       }
       if (this.variant === 'glossary') {
       render(
