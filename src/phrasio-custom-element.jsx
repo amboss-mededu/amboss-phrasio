@@ -5,8 +5,10 @@ import TooltipLogo from './TooltipLogo'
 import { FEEDBACK_URL_DE, FEEDBACK_URL_EN } from './config'
 import {glossary_link_clicked, tooltip_link_clicked} from './event-names'
 import styles from './phrasio-custom-element.css'
+import {useEffect} from 'preact/hooks'
 
 const TooltipContent = ({ phrasioId, locale, theme, title, subtitle='', body, destinations=[], media=[], customBranding, withLinks }) => {
+  useEffect(() => {console.log('phrase', phrasioId)}, [phrasioId])
   return (
     <div id="content" className={theme}>
       <Card key={title} title={phrasioId ? title : ''} subtitle={phrasioId ? subtitle : ''}>
