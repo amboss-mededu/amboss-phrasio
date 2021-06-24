@@ -203,6 +203,7 @@ class AmbossPhrasio extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.state = 'loading'
     loadFonts();
   }
 
@@ -225,6 +226,7 @@ class AmbossPhrasio extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue) {
+      this.state = 'loading'
       this.render();
     }
   }
@@ -242,11 +244,11 @@ class AmbossPhrasio extends HTMLElement {
             </div>
             <TooltipContent
               phrasioId={this.phrasioId}
-              title={title}
-              subtitle={subtitle}
-              body={body}
-              media={media}
-              destinations={destinations}
+              title={this.state === 'done' ? title : ''}
+              subtitle={this.state === 'done' ? subtitle : ''}
+              body={this.state === 'done' ? body : ''}
+              media={this.state === 'done' ? media : []}
+              destinations={this.state === 'done' ? destinations : []}
               locale={this.locale}
               theme={this.theme}
               campaign={this.campaign}
@@ -256,11 +258,12 @@ class AmbossPhrasio extends HTMLElement {
           </>,
           this.shadowRoot
         );
+        this.state = 'done'
       }
       if (this.variant === "glossary") {
         render(
           <GlossaryContent
-            phrasioId={phrasioId}
+            phrasioId={this.phrasioId}
             title={title}
             subtitle={subtitle}
             body={body}
