@@ -27,7 +27,7 @@
 :host-context(amboss-annotation-content[data-variant="tooltip"][show-popper])
   #content {
   color: initial;
-  transition: all 0.2s;
+  transition: all 50ms;
 }
 
 :host-context([data-variant="tooltip"][show-popper])

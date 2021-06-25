@@ -162,6 +162,11 @@ class AmbossPhrasio extends HTMLElement {
   static get observedAttributes() {
     return [
       "data-phrasio-id",
+      "data-title",
+      "data-subtitle",
+      "data-body",
+      "data-destinations",
+      "data-media",
       "data-locale",
       "data-theme",
     ];
@@ -169,6 +174,26 @@ class AmbossPhrasio extends HTMLElement {
 
   get phrasioId() {
     return this.getAttribute("data-phrasio-id");
+  }
+
+  get title() {
+    return this.getAttribute("data-title");
+  }
+
+  get subtitle() {
+    return this.getAttribute("data-subtitle");
+  }
+
+  get body() {
+    return this.getAttribute("data-body");
+  }
+
+  get destinations() {
+    return this.getAttribute("data-destinations");
+  }
+
+  get media() {
+    return this.getAttribute("data-media");
   }
 
   get locale() {
@@ -225,9 +250,9 @@ class AmbossPhrasio extends HTMLElement {
   }
 
   render() {
-    getPhrasio(this.phrasioId).then((res) => {
-      const { title, subtitle, body, destinations, media, phrasioId } =
-        res || {};
+    // getPhrasio(this.phrasioId).then((res) => {
+    //   const { title, subtitle, body, destinations, media, phrasioId } =
+    //     res || {};
 
       if (this.variant === "tooltip") {
         render(
@@ -236,12 +261,12 @@ class AmbossPhrasio extends HTMLElement {
               <div id="buffer"></div>
             </div>
             <TooltipContent
-              phrasioId={phrasioId}
-              title={title}
-              subtitle={subtitle}
-              body={body}
-              media={media}
-              destinations={destinations}
+              phrasioId={this.phrasioId}
+              title={this.title}
+              subtitle={this.subtitle}
+              body={this.body}
+              destinations={this.destinations}
+              media={this.media}
               locale={this.locale}
               theme={this.theme}
               campaign={this.campaign}
@@ -256,18 +281,18 @@ class AmbossPhrasio extends HTMLElement {
         render(
           <GlossaryContent
             phrasioId={this.phrasioId}
-            title={title}
-            subtitle={subtitle}
-            body={body}
-            media={media}
-            destinations={destinations}
+            title={this.title}
+            subtitle={this.subtitle}
+            body={this.body}
+            destinations={this.destinations}
+            media={this.media}
             theme={this.theme}
             withLinks={this.withLinks}
           />,
           this.shadowRoot
         );
       }
-    });
+    // });
   }
 }
 
