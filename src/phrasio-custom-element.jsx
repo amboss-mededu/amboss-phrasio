@@ -169,6 +169,7 @@ class AmbossPhrasio extends HTMLElement {
       "data-media",
       "data-locale",
       "data-theme",
+      "data-variant",
     ];
   }
 
@@ -250,7 +251,6 @@ class AmbossPhrasio extends HTMLElement {
   }
 
   render() {
-
       if (this.variant === "tooltip") {
         render(
           <>
@@ -276,6 +276,7 @@ class AmbossPhrasio extends HTMLElement {
       }
       if (this.variant === "glossary") {
         getPhrasio(this.phrasioId).then((res) => {
+          console.log(`!! res =>`, res)
           const { phrasioId, title, subtitle, body, destinations=[], media=[] } = res || {};
           render(
             <GlossaryContent
