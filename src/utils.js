@@ -1,3 +1,9 @@
+export const getPhrasio = (id) =>
+    window.adaptor({
+        subject: "getTooltipContent",
+        id,
+    });
+
 export const track = (name, args) =>
   window.adaptor({
     subject: "track",

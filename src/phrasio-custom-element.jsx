@@ -12,7 +12,7 @@ import {
   H5,
   H6,
 } from "@amboss/design-system";
-import { track, loadFonts } from "./utils";
+import { track, loadFonts, getPhrasio } from "./utils";
 import TooltipLogo from "./TooltipLogo";
 import { FEEDBACK_URL_DE, FEEDBACK_URL_EN } from "./config";
 import { glossary_link_clicked, tooltip_link_clicked } from "./event-names";
@@ -250,9 +250,6 @@ class AmbossPhrasio extends HTMLElement {
   }
 
   render() {
-    // getPhrasio(this.phrasioId).then((res) => {
-    //   const { title, subtitle, body, destinations, media, phrasioId } =
-    //     res || {};
 
       if (this.variant === "tooltip") {
         render(
@@ -278,21 +275,23 @@ class AmbossPhrasio extends HTMLElement {
         );
       }
       if (this.variant === "glossary") {
-        render(
-          <GlossaryContent
-            phrasioId={this.phrasioId}
-            title={this.title}
-            subtitle={this.subtitle}
-            body={this.body}
-            destinations={this.destinations}
-            media={this.media}
-            theme={this.theme}
-            withLinks={this.withLinks}
-          />,
-          this.shadowRoot
-        );
+        getPhrasio(this.phrasioId).then((res) => {
+          const { phrasioId, title, subtitle, body, destinations=[], media=[] } = res || {};
+          render(
+            <GlossaryContent
+              phrasioId={phrasioId}
+              title={title}
+              subtitle={subtitle}
+              body={body}
+              destinations={destinations}
+              media={media}
+              theme={this.theme}
+              withLinks={this.withLinks}
+            />,
+            this.shadowRoot
+          );
+      });
       }
-    // });
   }
 }
 
