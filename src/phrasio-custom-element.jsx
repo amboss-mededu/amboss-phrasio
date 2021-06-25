@@ -12,7 +12,7 @@ import {
   H5,
   H6,
 } from "@amboss/design-system";
-import { track, getPhrasio, loadFonts } from "./utils";
+import { track, loadFonts } from "./utils";
 import TooltipLogo from "./TooltipLogo";
 import { FEEDBACK_URL_DE, FEEDBACK_URL_EN } from "./config";
 import { glossary_link_clicked, tooltip_link_clicked } from "./event-names";
@@ -189,11 +189,11 @@ class AmbossPhrasio extends HTMLElement {
   }
 
   get destinations() {
-    return this.getAttribute("data-destinations");
+    return JSON.parse(this.getAttribute("data-destinations"));
   }
 
   get media() {
-    return this.getAttribute("data-media");
+    return JSON.parse(this.getAttribute("data-media"));
   }
 
   get locale() {
