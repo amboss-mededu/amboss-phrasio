@@ -251,7 +251,7 @@ class AmbossPhrasio extends HTMLElement {
   }
 
   render() {
-      if (this.variant === "tooltip") {
+      if (this.variant === "toolt324ip") {
         render(
           <>
             <div id="amboss-annotation-arrow" data-popper-arrow>
@@ -274,9 +274,33 @@ class AmbossPhrasio extends HTMLElement {
           this.shadowRoot
         );
       }
+    if (this.variant === "tooltip") {
+      getPhrasio(this.phrasioId).then((res) => {
+        const { title, subtitle, body, destinations=[], media=[] } = res || {};
+      render(
+          <>
+            <div id="amboss-annotation-arrow" data-popper-arrow>
+              <div id="buffer"></div>
+            </div>
+            <TooltipContent
+                phrasioId={this.phrasioId}
+                title={title}
+                subtitle={subtitle}
+                body={body}
+                destinations={destinations}
+                media={media}
+                locale={this.locale}
+                theme={this.theme}
+                campaign={this.campaign}
+                customBranding={this.customBranding}
+                withLinks={this.withLinks}
+            />
+          </>,
+          this.shadowRoot
+      );
+    })}
       if (this.variant === "glossary") {
         getPhrasio(this.phrasioId).then((res) => {
-          console.log(`!! res =>`, res)
           const { phrasioId, title, subtitle, body, destinations=[], media=[] } = res || {};
           render(
             <GlossaryContent
