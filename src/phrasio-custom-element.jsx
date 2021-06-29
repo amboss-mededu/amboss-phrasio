@@ -8,14 +8,11 @@ import {
   Inline,
   Link,
   Text,
-  Box,
-  H5,
-  H6,
 } from "@amboss/design-system";
 import { track, loadFonts, getPhrasio } from "./utils";
 import TooltipLogo from "./TooltipLogo";
 import { FEEDBACK_URL_DE, FEEDBACK_URL_EN } from "./config";
-import { glossary_link_clicked, tooltip_link_clicked } from "./event-names";
+import { tooltip_link_clicked } from "./event-names";
 import styles from "./phrasio-custom-element.css";
 
 const TooltipContent = ({
@@ -97,74 +94,12 @@ const TooltipContent = ({
   );
 };
 
-export function GlossaryContent({
-  phrasioId,
-  title,
-  subtitle = "",
-  body,
-  destinations = [],
-  media = [],
-  withLinks = "yes",
-}) {
-  return (
-    <Box space="s">
-      <H5>{title}</H5>
-      {subtitle ? (
-        <Box space="zero" vSpace="xxs">
-          <H6>{subtitle}</H6>
-        </Box>
-      ) : (
-        ""
-      )}
-      {body ? (
-        <Box space="zero" vSpace="xs">
-          <Text>{body}</Text>
-        </Box>
-      ) : (
-        ""
-      )}
-      {withLinks !== "no" && destinations.length > 0 ? (
-        <Stack space="zero">
-          {destinations.map(({ label, href }, i) => {
-            function handleLinkClick(e) {
-              track(glossary_link_clicked, {
-                phrasioId,
-                label,
-              });
-            }
-            return (
-              <Box key={label} space="zero" vSpace="xs">
-                <Inline space="s" noWrap vAlignItems="center">
-                  <Icon name="article" variant="primary" />
-                  <Link
-                    href={href}
-                    variant="primary"
-                    size="l"
-                    onClick={handleLinkClick}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {label}
-                  </Link>
-                </Inline>
-              </Box>
-            );
-          })}
-        </Stack>
-      ) : (
-        ""
-      )}
-    </Box>
-  );
-}
-
 class AmbossPhrasio extends HTMLElement {
   static get observedAttributes() {
     return [
       "data-phrasio-id",
       "data-locale",
       "data-theme",
-      "data-variant",
     ];
   }
 
@@ -190,10 +125,6 @@ class AmbossPhrasio extends HTMLElement {
 
   get withLinks() {
     return this.getAttribute("data-with-links");
-  }
-
-  get variant() {
-    return this.getAttribute("data-variant");
   }
 
   constructor() {
@@ -226,7 +157,6 @@ class AmbossPhrasio extends HTMLElement {
   }
 
   render() {
-    if (this.variant === "tooltip") {
       getPhrasio(this.phrasioId).then((res) => {
         const { title, subtitle, body, destinations=[], media=[] } = res || {};
       render(
@@ -251,24 +181,6 @@ class AmbossPhrasio extends HTMLElement {
           this.shadowRoot
       );
     })}
-      if (this.variant === "glossary") {
-        getPhrasio(this.phrasioId).then((res) => {
-          const { phrasioId, title, subtitle, body, destinations=[], media=[] } = res || {};
-          render(
-            <GlossaryContent
-              phrasioId={phrasioId}
-              title={title}
-              subtitle={subtitle}
-              body={body}
-              destinations={destinations}
-              media={media}
-              theme={this.theme}
-              withLinks={this.withLinks}
-            />,
-            this.shadowRoot
-          );
-      });
-      }
   }
 }
 
