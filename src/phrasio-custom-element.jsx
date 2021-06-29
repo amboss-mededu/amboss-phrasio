@@ -182,6 +182,5 @@ class AmbossPhrasio extends HTMLElement {
       );
     })}
   }
-}
 
 export default AmbossPhrasio;
