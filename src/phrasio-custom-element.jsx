@@ -39,8 +39,8 @@ const TooltipContent = ({
       >
         <CardBox>
           <Stack space="xs">
-            {phrasioId && body ? <Text>{body}</Text> : ""}
-            {withLinks !== "no" && destinations.length && phrasioId > 0 ? (
+            {body ? <Text>{body}</Text> : ""}
+            {withLinks !== "no" && destinations.length > 0 ? (
               <Stack space="xs">
                 {destinations.map(({ label, href }) => {
                   function handleLinkClick(e) {

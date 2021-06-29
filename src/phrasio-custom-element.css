@@ -7,7 +7,7 @@
   height: 0;
 }
 
-:host-context([data-variant="tooltip"][show-popper]) {
+:host-context(amboss-annotation-content[data-variant="tooltip"][show-popper]) {
   visibility: visible;
   pointer-events: auto;
   z-index: 9999;
@@ -16,22 +16,14 @@
 }
 
 :host-context(amboss-annotation-content[data-variant="tooltip"]) #content {
-  color: #ffffff;
+  height: 0;
 }
 
-:host-context(amboss-annotation-content[data-variant="tooltip"][data-theme="dark-theme"])
-  #content {
-  color: #24282d;
+:host-context(amboss-annotation-content[data-variant="tooltip"][show-popper]) #content {
+  height: 0;
 }
 
-:host-context(amboss-annotation-content[data-variant="tooltip"][show-popper])
-  #content {
-  color: initial;
-  transition: all 50ms;
-}
-
-:host-context([data-variant="tooltip"][show-popper])
-  > #amboss-annotation-arrow::before {
+:host-context([data-variant="tooltip"][show-popper]) > #amboss-annotation-arrow::before {
   content: "";
   visibility: visible;
   transform: rotate(45deg);
@@ -41,49 +33,36 @@
   background-color: #fff;
 }
 
-:host-context([data-variant="tooltip"][data-theme="dark-theme"])
-  svg.tooltip-logo
-  .black {
+:host-context([data-variant="tooltip"][data-theme="dark-theme"]) svg.tooltip-logo .black {
   fill: #fff;
 }
 
-:host-context([data-variant="tooltip"][data-theme="dark-theme"])
-  > #amboss-annotation-arrow::before {
+:host-context([data-variant="tooltip"][data-theme="dark-theme"]) > #amboss-annotation-arrow::before {
   background-color: #24282d;
 }
 
-:host-context([data-variant="tooltip"][data-popper-placement^="top"])
-  > #amboss-annotation-arrow {
+:host-context([data-variant="tooltip"][data-popper-placement^="top"]) > #amboss-annotation-arrow {
   bottom: 5px;
 }
 
-:host-context([data-variant="tooltip"][data-popper-placement^="bottom"])
-  > #amboss-annotation-arrow {
+:host-context([data-variant="tooltip"][data-popper-placement^="bottom"]) > #amboss-annotation-arrow {
   top: -5px;
 }
 
-:host-context([data-variant="tooltip"][show-popper])
-  > #amboss-annotation-arrow
-  > #buffer::before {
+:host-context([data-variant="tooltip"][show-popper]) > #amboss-annotation-arrow > #buffer::before {
   content: "";
   position: absolute;
   background-color: transparent;
 }
 
-:host-context([data-variant="tooltip"][data-popper-placement^="bottom"])
-  > #amboss-annotation-arrow
-  > #buffer::before,
-:host-context([data-variant="tooltip"][data-popper-placement^="top"])
-  > #amboss-annotation-arrow
-  > #buffer::before {
+:host-context([data-variant="tooltip"][data-popper-placement^="bottom"]) > #amboss-annotation-arrow > #buffer::before,
+:host-context([data-variant="tooltip"][data-popper-placement^="top"]) > #amboss-annotation-arrow > #buffer::before {
   width: 240px;
   height: 1.5rem;
   margin-left: -120px;
   margin-top: -0.5rem;
 }
 
-:host-context([data-variant="tooltip"][data-popper-placement^="top"])
-  > #amboss-annotation-arrow
-  > #buffer::before {
+:host-context([data-variant="tooltip"][data-popper-placement^="top"]) > #amboss-annotation-arrow > #buffer::before {
   margin-top: -0.5rem;
 }
