@@ -162,11 +162,6 @@ class AmbossPhrasio extends HTMLElement {
   static get observedAttributes() {
     return [
       "data-phrasio-id",
-      "data-title",
-      "data-subtitle",
-      "data-body",
-      "data-destinations",
-      "data-media",
       "data-locale",
       "data-theme",
       "data-variant",
@@ -175,26 +170,6 @@ class AmbossPhrasio extends HTMLElement {
 
   get phrasioId() {
     return this.getAttribute("data-phrasio-id");
-  }
-
-  get title() {
-    return this.getAttribute("data-title");
-  }
-
-  get subtitle() {
-    return this.getAttribute("data-subtitle");
-  }
-
-  get body() {
-    return this.getAttribute("data-body");
-  }
-
-  get destinations() {
-    return JSON.parse(this.getAttribute("data-destinations"));
-  }
-
-  get media() {
-    return JSON.parse(this.getAttribute("data-media"));
   }
 
   get locale() {
@@ -251,29 +226,6 @@ class AmbossPhrasio extends HTMLElement {
   }
 
   render() {
-      if (this.variant === "toolt324ip") {
-        render(
-          <>
-            <div id="amboss-annotation-arrow" data-popper-arrow>
-              <div id="buffer"></div>
-            </div>
-            <TooltipContent
-              phrasioId={this.phrasioId}
-              title={this.title}
-              subtitle={this.subtitle}
-              body={this.body}
-              destinations={this.destinations}
-              media={this.media}
-              locale={this.locale}
-              theme={this.theme}
-              campaign={this.campaign}
-              customBranding={this.customBranding}
-              withLinks={this.withLinks}
-            />
-          </>,
-          this.shadowRoot
-        );
-      }
     if (this.variant === "tooltip") {
       getPhrasio(this.phrasioId).then((res) => {
         const { title, subtitle, body, destinations=[], media=[] } = res || {};

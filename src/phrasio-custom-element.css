@@ -20,7 +20,7 @@
 }
 
 :host-context(amboss-annotation-content[data-variant="tooltip"][show-popper]) #content {
-  height: 0;
+  height: auto;
 }
 
 :host-context([data-variant="tooltip"][show-popper]) > #amboss-annotation-arrow::before {
