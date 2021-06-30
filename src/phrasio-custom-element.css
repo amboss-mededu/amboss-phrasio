@@ -23,6 +23,10 @@
   height: auto;
 }
 
+:host-context(amboss-annotation-content[show-popper]) #content a {
+  font-size: initial;
+}
+
 :host-context(amboss-annotation-content[show-popper]) > #amboss-annotation-arrow::before {
   content: "";
   visibility: visible;
