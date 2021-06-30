@@ -15,11 +15,11 @@
   height: auto;
 }
 
-:host-context(amboss-annotation-content) #content {
+:host-context(amboss-annotation-content) #content * {
   height: 0;
 }
 
-:host-context(amboss-annotation-content[show-popper]) #content {
+:host-context(amboss-annotation-content[show-popper]) #content * {
   height: auto;
 }
 
