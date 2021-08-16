@@ -3,48 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script id="amboss-annotation-content" type="module" crossorigin src="./tests/index.js"></script>
-<!--    <script id="amboss-phrasio" type="module" crossorigin src="./tests/index.js"></script>-->
+    <script id="amboss-content-card" type="module" crossorigin src="./tests/index.js"></script>
 </head>
-<body>
-<div id="app"></div>
-
+<body style="display: flex; flex-wrap: wrap; background-color: darkgoldenrod;">
 <script type="text/javascript">
-    const ambossScript = document.querySelector('#amboss-annotation-content');
+    const ambossScript = document.querySelector('#amboss-content-card');
     ambossScript.addEventListener('load', function() {
         if (window.adaptor) {
-            const app = document.getElementById('app')
-            app.innerHTML = `<div>
-            <amboss-annotation-content
-                data-phrasio-id="test"
-                data-locale="us"
-                data-theme="light-theme"
-                data-campaign=""
-                data-custom-branding="no"
-                data-with-links="yes"
-                data-variant="glossary"
-            ></amboss-annotation-content>
-            </div>`
-            // <br/>
-            //             <amboss-annotation-content
-            //     data-phrasio-id="test"
-            //     data-locale="us"
-            //     data-theme="light-theme"
-            //     data-campaign=""
-            //     data-custom-branding="no"
-            //     data-with-links="yes"
-            //     data-variant="tooltip"
-            // ></amboss-annotation-content>
-            // <br/>
-            // <amboss-annotation-content
-            //     data-phrasio-id="test"
-            //     data-locale="us"
-            //     data-theme="light-theme"
-            //     data-campaign=""
-            //     data-custom-branding="no"
-            //     data-with-links="no"
-            //     show-popper
-            // ></amboss-annotation-content>
+            document.body.innerHTML = `
+<h2 style="width: 100%;">Light theme, us locale, no custom branding, with links</h2>
+<amboss-content-card
+    data-content-id="test"
+    data-locale="us"
+    data-theme="light-theme"
+    data-campaign=""
+    data-custom-branding="no"
+    data-with-links="yes"
+></amboss-content-card>
+<h2 style="width: 100%;">Light theme, us locale, no custom branding, without links</h2>
+<amboss-content-card
+    data-content-id="test"
+    data-locale="us"
+    data-theme="light-theme"
+    data-campaign=""
+    data-custom-branding="no"
+    data-with-links="no"
+></amboss-content-card>
+<h2 style="width: 100%;">Dark theme, us locale, no custom branding, with links</h2>
+<amboss-content-card
+    data-content-id="test"
+    data-locale="us"
+    data-theme="dark-theme"
+    data-campaign=""
+    data-custom-branding="no"
+    data-with-links="yes"
+></amboss-content-card>`
+            document.querySelectorAll('amboss-content-card').forEach((el) => el.setAttribute('show-popper', ''))
         }
     });
 </script>

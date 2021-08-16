@@ -1,103 +1,37 @@
-import {AmbossPhrasio} from '../dist/amboss-phrasio.es.js'
-import mockTermsEn from './mocks/terms_us_en.json'
-import mockTermsDe from './mocks/terms_de_de.json'
-import {mockPhrasioDe, mockPhrasioEn} from './mocks'
-import {BASE_URL_NEXT} from '../src/config'
+import { AmbossContentCard } from '../dist/amboss-phrasio.es.js'
 
-window.customElements.define('amboss-annotation-content', AmbossPhrasio)
-
-const opts = {}
-
-function generateHref({ particleEid, articleEid, title, locale, campaign, source='partner-sdk', medium='website' }) {
-    const replaceSpacesWithUnderscores = (str) => str.replace(/ /g, '_')
-    const urlify = (str) => encodeURIComponent(replaceSpacesWithUnderscores(str)).replace(/[!'()*]/g, (c) => '%' + c.charCodeAt(0).toString(16))
-    const utmString = `?utm_campaign=${campaign}&utm_source=${source}&utm_medium=${medium}&utm_term=${urlify(title)}`
-    const anchorString = particleEid ? `#${particleEid}` : ''
-    // https://next.amboss.com/us/article/4N03Yg?utm_source=aaas&utm_medium=aaas&utm_campaign=aaas&utm_term=FAST#Zefeb92d093a9fbf8b7c983722bdbb10d
-    return `${BASE_URL_NEXT}${locale}/article/${articleEid}${utmString}${anchorString}`
-}
-
-async function fetchPhrasioFromApi({ locale, campaign = '', token = '', phrasioId }) {
-    if (locale !== 'de' && locale !== 'us') console.error(`locale === ${locale} in fetchPhrasio`)
-    return fetch(`https://nextapi${locale}.amboss.com/`, {
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json',
-            Authorization: token ? `Bearer ${token}` : '',
-        },
-        body: `{\"query\":\"{phraseGroup(eid: \\\"${phrasioId}\\\") {\\neid\\ntitle\\nabstract\\ntranslation\\nsynonyms\\ndestinations {\\nlabel\\narticleEid\\nparticleEid\\nanchor}\\nmedia {\\ntitle\\neid\\ncanonicalUrl\\ncopyright {\\nhtml}}}}\\n\"}`,
-    }).then((response) => response.json()).catch((err) => console.error('!! err in fetchPhrasioFromApi', err))
-}
-
-
-function normaliseRawPhrasio(phrasioRAW, locale, campaign) {
-    const destinations = Array.isArray(phrasioRAW?.data?.phraseGroup?.destinations)
-        ? phrasioRAW.data.phraseGroup.destinations
-        : []
-    const media = Array.isArray(phrasioRAW?.data?.phraseGroup?.media) ? phrasioRAW.data.phraseGroup.media : []
-    return {
-        phrasioId: phrasioRAW?.data?.phraseGroup.eid || '',
-        title: phrasioRAW?.data?.phraseGroup.title || '',
-        subtitle: phrasioRAW?.data?.phraseGroup.translation || '',
-        body: phrasioRAW?.data?.phraseGroup.abstract || '',
-        media: media.map((m) => ({
-            eid: m.eid,
-            copyright: m?.copyright?.html,
-            title: m.title,
-            href: m.canonicalUrl,
-        })),
-        destinations: destinations.map((d) => ({
-            label: d.label,
-            href: generateHref({
-                anchor: d.anchor || '',
-                particleEid: d.particleEid || '',
-                articleEid: d.articleEid || '',
-                title: d.title || '',
-                locale,
-                campaign,
-            }),
-        })),
-    }
-}
-
-const adaptorMethods = {
-    track: async (trackingProperties) => console.info('adaptor track', trackingProperties),
-    getTerms: async (locale, token) => locale === 'de' ? mockTermsDe : mockTermsEn,
-    getTooltipContent: async (locale, token, id) => {
-        // const phrasio = await fetchPhrasioFromApi(locale, token, id)
-        const phrasio = await locale === 'de' ? mockPhrasioDe : mockPhrasioEn
-        const normalisedPhrasio = await normaliseRawPhrasio(phrasio, locale, '')
-        return normalisedPhrasio
-    }
-}
+window.customElements.define('amboss-content-card', AmbossContentCard)
 
 const annotationOpts = {
     shouldAnnotate: true,
     annotationVariant: 'underline',
     useGlossary: 'yes',
     theme: 'light-theme',
-    locale: 'us',
+    locale: 'de',
     token: '123456789',
     customBranding: 'no',
     withLinks: 'yes',
-    ...opts,
     adaptorMethods: {
-        ...adaptorMethods,
-        ...opts.adaptorMethods || {}
+        track: async (trackingProperties) => console.info('adaptor track', trackingProperties),
+        getTerms: async (locale, token) => console.error('splat'),
+        getTooltipContent: async (locale, token, contentId) => {
+            const en = {"contentId":"test","title":"Creatinine clearance","subtitle":"Abbreviation: CrCl","body":"The rate at which creatinine is removed from the blood by the kidneys. Often used to estimate glomerular filtration rate because creatinine is freely filtered and secreted only in very small amounts.","media":[{"eid":"qLYCAp","copyright":"© AMBOSS","title":"Diabetes mellitus diagnosis","href":"https://media-us.amboss.com/media/thumbs/big_58905711861d9.jpg"},{"eid":"C5bqm8","copyright":"© AMBOSS","title":"Diabetes mellitus type 2 fact sheet","href":"https://media-us.amboss.com/media/thumbs/big_5f47b80b25dc9.jpg"}],"destinations":[{"label":"Diagnostic evaluation of the kidney and urinary tract → Renal function test","href":"https://next.amboss.com/us/article/kg0mv2?utm_campaign=&utm_source=partner-sdk&utm_medium=website&utm_term=#PJXW8_"}]}
+            const de = {"contentId":"test","title":"ACE","subtitle":"","body":"Enzym, das vom Lungenendothel synthetisiert wird und am Regelkreis des Renin-Angiotensin-Aldosteron-Systems (RAAS) beteiligt ist. Es wandelt Angiotensin I in Angiotensin II um, das sympathikoton und vasokonstriktiv wirkt und die renale Natriumrückresorption steigert. Therapeutisch erfolgt eine Hemmung von ACE zur Behandlung der arteriellen Hypertonie. Die Bestimmung der ACE-Konzentration hat diagnostische Bedeutung bei der Beurteilung der Aktivität einer Sarkoidose.","media":[{"eid":"qLYCAp","copyright":"© AMBOSS","title":"Diabetes mellitus diagnosis","href":"https://media-us.amboss.com/media/thumbs/big_58905711861d9.jpg"},{"eid":"C5bqm8","copyright":"© AMBOSS","title":"Diabetes mellitus type 2 fact sheet","href":"https://media-us.amboss.com/media/thumbs/big_5f47b80b25dc9.jpg"}],"destinations":[{"label":"Nierendurchblutung und glomeruläre Filtration → Nierendurchblutung","href":"https://next.amboss.com/de/article/bJ0HsS?utm_campaign=&utm_source=partner-sdk&utm_medium=website&utm_term=#DHc1sd0"}]}
+            return locale === 'de' ? de : en
+        }
     },
 }
 
-window.adaptor = ({subject, locale=annotationOpts.locale, token=annotationOpts.token, id, trackingProperties }) => {
+window.adaptor = ({subject, locale=annotationOpts.locale, token=annotationOpts.token, contentId, trackingProperties }) => {
     switch (subject) {
         case 'track': {
             return annotationOpts.adaptorMethods.track(trackingProperties)
         }
         case 'getTerms': {
-            return annotationOpts.adaptorMethods.getTerms(locale, token).then((res) => new Map(Object.entries(res)));
-            // you cannot get a map via the background script so get the array of tuples and create the map here
+            throw new Error('getTerms should not be called via tooltip content')
         }
         case 'getTooltipContent': {
-            return annotationOpts.adaptorMethods.getTooltipContent(locale, token, id)
+            return annotationOpts.adaptorMethods.getTooltipContent(locale, token, contentId)
         }
         default:
             throw new Error('Message requires message.subject')

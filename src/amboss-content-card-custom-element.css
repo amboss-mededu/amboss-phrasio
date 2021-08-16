@@ -1,0 +1,72 @@
+:host-context(amboss-content-card) {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12), 0 32px 112px rgba(0, 0, 0, 0.24);
+  border-radius: 12px;
+  color: initial;
+  visibility: hidden;
+  pointer-events: none;
+  height: 0;
+}
+
+:host-context(amboss-content-card[show-popper]) {
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 9999;
+  max-width: 400px;
+  height: auto;
+}
+
+:host-context(amboss-content-card) #content * {
+  height: 0;
+}
+
+:host-context(amboss-content-card[show-popper]) #content * {
+  height: auto;
+}
+
+:host-context(amboss-content-card[show-popper]) #content a {
+  font-size: initial;
+}
+
+:host-context(amboss-content-card[show-popper]) > #amboss-content-card-arrow::before {
+  content: "";
+  visibility: visible;
+  transform: rotate(45deg);
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+}
+
+:host-context(amboss-content-card[data-theme="dark-theme"]) svg.tooltip-logo .black {
+  fill: #fff;
+}
+
+:host-context(amboss-content-card[data-theme="dark-theme"]) > #amboss-content-card-arrow::before {
+  background-color: #24282d;
+}
+
+:host-context(amboss-content-card[data-popper-placement^="top"]) > #amboss-content-card-arrow {
+  bottom: 5px;
+}
+
+:host-context(amboss-content-card[data-popper-placement^="bottom"]) > #amboss-content-card-arrow {
+  top: -5px;
+}
+
+:host-context(amboss-content-card[show-popper]) > #amboss-content-card-arrow > #buffer::before {
+  content: "";
+  position: absolute;
+  background-color: transparent;
+}
+
+:host-context(amboss-content-card[data-popper-placement^="bottom"]) > #amboss-content-card-arrow > #buffer::before,
+:host-context(amboss-content-card[data-popper-placement^="top"]) > #amboss-content-card-arrow > #buffer::before {
+  width: 240px;
+  height: 1.5rem;
+  margin-left: -120px;
+  margin-top: -0.5rem;
+}
+
+:host-context(amboss-content-card[data-popper-placement^="top"]) > #amboss-content-card-arrow > #buffer::before {
+  margin-top: -0.5rem;
+}

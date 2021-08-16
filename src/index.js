@@ -1,3 +1,3 @@
-import AmbossPhrasio from "./phrasio-custom-element";
+import AmbossContentCard from "./amboss-content-card-custom-element";
 
-export { AmbossPhrasio };
+export { AmbossContentCard };

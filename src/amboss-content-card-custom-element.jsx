@@ -8,15 +8,16 @@ import {
   Inline,
   Link,
   Text,
+    H1, H2
 } from "@amboss/design-system";
-import { track, loadFonts, getPhrasio } from "./utils";
+import { track, loadFonts, getTooltipContent } from "./utils";
 import TooltipLogo from "./TooltipLogo";
 import { FEEDBACK_URL_DE, FEEDBACK_URL_EN } from "./config";
-import { tooltip_link_clicked } from "./event-names";
-import styles from "./phrasio-custom-element.css";
+import { link_clicked } from "./event-names";
+import styles from "./amboss-content-card-custom-element.css";
 
-const TooltipContent = ({
-  phrasioId,
+const ContentCard = ({
+  contentId,
   locale,
   theme,
   title,
@@ -29,11 +30,9 @@ const TooltipContent = ({
 }) => {
   return (
     <div id="content" className={theme}>
-      <Card
-        key={title}
-        title={phrasioId ? title : ""}
-        subtitle={phrasioId ? subtitle : ""}
-      >
+      <Card key={title}>
+        <H1>{contentId ? title : ""}</H1>
+        <H2>{contentId ? subtitle : ""}</H2>
         <CardBox>
           <Stack space="xs">
             {body ? <Text>{body}</Text> : ""}
@@ -41,8 +40,8 @@ const TooltipContent = ({
               <Stack space="xs">
                 {destinations.map(({ label, href }) => {
                   function handleLinkClick(e) {
-                    track(tooltip_link_clicked, {
-                      phrasioId,
+                    track(link_clicked, {
+                      content_id: contentId,
                       label,
                     });
                   }
@@ -94,17 +93,17 @@ const TooltipContent = ({
   );
 };
 
-class AmbossPhrasio extends HTMLElement {
+class AmbossContentCard extends HTMLElement {
   static get observedAttributes() {
     return [
-      "data-phrasio-id",
+      "data-content-id",
       "data-locale",
       "data-theme",
     ];
   }
 
-  get phrasioId() {
-    return this.getAttribute("data-phrasio-id");
+  get contentId() {
+    return this.getAttribute("data-content-id");
   }
 
   get locale() {
@@ -157,15 +156,15 @@ class AmbossPhrasio extends HTMLElement {
   }
 
   render() {
-      getPhrasio(this.phrasioId).then((res) => {
+    getTooltipContent(this.contentId).then((res) => {
         const { title, subtitle, body, destinations=[], media=[] } = res || {};
       render(
           <>
-            <div id="amboss-annotation-arrow" data-popper-arrow>
+            <div id="amboss-content-card-arrow" data-popper-arrow>
               <div id="buffer"></div>
             </div>
-            <TooltipContent
-                phrasioId={this.phrasioId}
+            <ContentCard
+                contentId={this.contentId}
                 title={title}
                 subtitle={subtitle}
                 body={body}
@@ -183,4 +182,4 @@ class AmbossPhrasio extends HTMLElement {
     })}
   }
 
-export default AmbossPhrasio;
+export default AmbossContentCard;

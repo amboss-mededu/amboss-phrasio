@@ -1,7 +1,7 @@
-export const getPhrasio = (id) =>
+export const getTooltipContent = (contentId) =>
     window.adaptor({
         subject: "getTooltipContent",
-        id,
+        contentId,
     });
 
 export const track = (name, args) =>
