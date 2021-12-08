@@ -9,7 +9,7 @@
 <script type="text/javascript">
     const ambossScript = document.querySelector('#amboss-content-card');
     ambossScript.addEventListener('load', function() {
-        if (window.adaptor) {
+        if (window.ambossAnnotationAdaptor) {
             document.body.innerHTML = `
 <h2 style="width: 100%;">Light theme, us locale, no custom branding, with links</h2>
 <amboss-content-card
@@ -32,10 +32,10 @@
 <h2 style="width: 100%;">Dark theme, us locale, no custom branding, with links</h2>
 <amboss-content-card
     data-content-id="test"
-    data-locale="us"
+    data-locale="de"
     data-theme="dark-theme"
     data-campaign=""
-    data-custom-branding="no"
+    data-custom-branding="yes"
     data-with-links="yes"
 ></amboss-content-card>`
             document.querySelectorAll('amboss-content-card').forEach((el) => el.setAttribute('show-popper', ''))

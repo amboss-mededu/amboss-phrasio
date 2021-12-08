@@ -1,11 +1,12 @@
-export const getTooltipContent = (contentId) =>
-    window.adaptor({
+export const getTooltipContent = (locale, contentId) =>
+    window.ambossAnnotationAdaptor({
         subject: "getTooltipContent",
         contentId,
+        locale
     });
 
 export const track = (name, args) =>
-  window.adaptor({
+  window.ambossAnnotationAdaptor({
     subject: "track",
     trackingProperties: [name, args],
   });
