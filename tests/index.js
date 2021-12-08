@@ -1,4 +1,5 @@
-import { AmbossContentCard } from '../dist/amboss-phrasio.es.js'
+// import { AmbossContentCard } from '../dist/amboss-phrasio.es.js'
+import { AmbossContentCard } from '../src/index'
 
 window.customElements.define('amboss-content-card', AmbossContentCard)
 
@@ -22,18 +23,20 @@ const annotationOpts = {
     },
 }
 
-window.adaptor = ({subject, locale=annotationOpts.locale, token=annotationOpts.token, contentId, trackingProperties }) => {
+const adaptor = async ({ subject, locale, token, trackingProperties, contentId }) => {
     switch (subject) {
         case 'track': {
             return annotationOpts.adaptorMethods.track(trackingProperties)
         }
         case 'getTerms': {
-            throw new Error('getTerms should not be called via tooltip content')
+            return annotationOpts.adaptorMethods.getTerms(locale, token)
         }
         case 'getTooltipContent': {
             return annotationOpts.adaptorMethods.getTooltipContent(locale, token, contentId)
         }
         default:
-            throw new Error('Message requires message.subject')
+            throw new Error('Message requires subject')
     }
 }
+
+window.ambossAnnotationAdaptor = (message) => adaptor({ ...annotationOpts, ...message });

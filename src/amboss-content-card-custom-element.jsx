@@ -1,4 +1,5 @@
 import { render } from "preact";
+import { useState } from "preact/hooks";
 import {
   Icon,
   Card,
@@ -8,7 +9,8 @@ import {
   Inline,
   Link,
   Text,
-    H1, H2
+  H1,
+  H2
 } from "@amboss/design-system";
 import { track, loadFonts, getTooltipContent } from "./utils";
 import TooltipLogo from "./TooltipLogo";
@@ -156,7 +158,7 @@ class AmbossContentCard extends HTMLElement {
   }
 
   render() {
-    getTooltipContent(this.contentId).then((res) => {
+    getTooltipContent(this.locale, this.contentId).then((res) => {
         const { title, subtitle, body, destinations=[], media=[] } = res || {};
       render(
           <>
