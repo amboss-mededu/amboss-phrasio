@@ -97,7 +97,7 @@ const ContentCard = ({
 
 class AmbossContentCard extends HTMLElement {
   static get observedAttributes() {
-    return [ "data-content-id", "show-popper" ];
+    return [ "data-content-id" ];
   }
 
   get contentId() {
@@ -130,17 +130,17 @@ class AmbossContentCard extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue) {
       console.log('===> name, oldValue, newValue', name, oldValue, newValue)
-      this.render();
+      if (name === 'data-content-id') this.render(newValue);
     }
   }
 
-  render() {
+  render(newValue) {
     if (!window.ambossAnnotationOptions || !window.ambossAnnotationAdaptor) return undefined;
     if (typeof window.ambossAnnotationAdaptor.getTooltipContent !== 'function') return undefined;
     if (window.ambossAnnotationOptions.locale !== 'us' && window.ambossAnnotationOptions.locale !== 'de') return undefined;
     if (!this.contentId) return undefined;
 
-    setTimeout(window.ambossAnnotationAdaptor.getTooltipContent(this.contentId).then((res) => {
+    setTimeout(window.ambossAnnotationAdaptor.getTooltipContent(newValue || this.contentId).then((res) => {
       const { title, subtitle, body, destinations=[], media=[] } = res || {};
       render(
           <>
