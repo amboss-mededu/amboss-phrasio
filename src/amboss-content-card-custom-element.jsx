@@ -27,8 +27,9 @@ const ContentCard = ({
   destinations = [],
   media = [],
   customBranding,
-    track,
+  track,
 }) => {
+  if (!contentId) return <div />
   return (
     <div id="content" className={theme}>
       <Card key={title}>
@@ -96,7 +97,7 @@ const ContentCard = ({
 
 class AmbossContentCard extends HTMLElement {
   static get observedAttributes() {
-    return [ "data-content-id" ];
+    return [ "data-content-id", "show-popper" ];
   }
 
   get contentId() {
@@ -128,6 +129,7 @@ class AmbossContentCard extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue) {
+      console.log('===> name, oldValue, newValue', name, oldValue, newValue)
       this.render();
     }
   }
@@ -137,10 +139,8 @@ class AmbossContentCard extends HTMLElement {
     if (typeof window.ambossAnnotationAdaptor.getTooltipContent !== 'function') return undefined;
     if (window.ambossAnnotationOptions.locale !== 'us' && window.ambossAnnotationOptions.locale !== 'de') return undefined;
     if (!this.contentId) return undefined;
-    console.log('===> ambossAnnotationOptions', window.ambossAnnotationOptions)
-    console.log('===> this.contentId', this.contentId)
 
-    window.ambossAnnotationAdaptor.getTooltipContent(this.contentId).then((res) => {
+    setTimeout(window.ambossAnnotationAdaptor.getTooltipContent(this.contentId).then((res) => {
       const { title, subtitle, body, destinations=[], media=[] } = res || {};
       render(
           <>
@@ -163,7 +163,7 @@ class AmbossContentCard extends HTMLElement {
           </>,
           this.shadowRoot
       );
-    })}
+    }), 10)}
   }
 
 export default AmbossContentCard;
