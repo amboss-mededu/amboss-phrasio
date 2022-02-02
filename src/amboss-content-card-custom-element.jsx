@@ -1,5 +1,4 @@
 import { render } from "preact";
-import { useState } from "preact/hooks";
 import {
   Icon,
   Card,
@@ -12,7 +11,7 @@ import {
   H1,
   H2
 } from "@amboss/design-system";
-import { track, loadFonts, getTooltipContent } from "./utils";
+import { loadFonts } from "./utils";
 import TooltipLogo from "./TooltipLogo";
 import { FEEDBACK_URL_DE, FEEDBACK_URL_EN } from "./config";
 import { link_clicked } from "./event-names";
@@ -28,7 +27,7 @@ const ContentCard = ({
   destinations = [],
   media = [],
   customBranding,
-  withLinks,
+    track,
 }) => {
   return (
     <div id="content" className={theme}>
@@ -38,14 +37,14 @@ const ContentCard = ({
         <CardBox>
           <Stack space="xs">
             {body ? <Text>{body}</Text> : ""}
-            {withLinks !== "no" && destinations.length > 0 ? (
+            {destinations.length > 0 ? (
               <Stack space="xs">
                 {destinations.map(({ label, href }) => {
                   function handleLinkClick(e) {
-                    track(link_clicked, {
+                    track([link_clicked, {
                       content_id: contentId,
                       label,
-                    });
+                    }]);
                   }
                   return (
                     <Inline key={label} space="s" noWrap vAlignItems="center">
@@ -99,33 +98,11 @@ class AmbossContentCard extends HTMLElement {
   static get observedAttributes() {
     return [
       "data-content-id",
-      "data-locale",
-      "data-theme",
     ];
   }
 
   get contentId() {
     return this.getAttribute("data-content-id");
-  }
-
-  get locale() {
-    return this.getAttribute("data-locale");
-  }
-
-  get theme() {
-    return this.getAttribute("data-theme");
-  }
-
-  get campaign() {
-    return this.getAttribute("data-campaign");
-  }
-
-  get customBranding() {
-    return this.getAttribute("data-custom-branding");
-  }
-
-  get withLinks() {
-    return this.getAttribute("data-with-links");
   }
 
   constructor() {
@@ -158,8 +135,13 @@ class AmbossContentCard extends HTMLElement {
   }
 
   render() {
-    getTooltipContent(this.locale, this.contentId).then((res) => {
-        const { title, subtitle, body, destinations=[], media=[] } = res || {};
+    if (!window.ambossAnnotationOptions || !window.ambossAnnotationAdaptor) return undefined;
+    if (typeof window.ambossAnnotationAdaptor.getTooltipContent !== 'function') return undefined;
+    if (window.ambossAnnotationOptions.locale !== 'us' && window.ambossAnnotationOptions.locale !== 'de') return undefined;
+    if (!this.contentId) return undefined;
+
+    window.ambossAnnotationAdaptor.getTooltipContent(this.contentId).then((res) => {
+      const { title, subtitle, body, destinations=[], media=[] } = res || {};
       render(
           <>
             <div id="amboss-content-card-arrow" data-popper-arrow>
@@ -170,13 +152,13 @@ class AmbossContentCard extends HTMLElement {
                 title={title}
                 subtitle={subtitle}
                 body={body}
-                destinations={destinations}
                 media={media}
-                locale={this.locale}
-                theme={this.theme}
-                campaign={this.campaign}
-                customBranding={this.customBranding}
-                withLinks={this.withLinks}
+                destinations={window.ambossAnnotationOptions.withLinks === 'no' ? [] : destinations}
+                locale={window.ambossAnnotationOptions.locale}
+                theme={window.ambossAnnotationOptions.theme}
+                campaign={window.ambossAnnotationOptions.campaign}
+                customBranding={window.ambossAnnotationOptions.customBranding}
+                track={window.ambossAnnotationAdaptor.track}
             />
           </>,
           this.shadowRoot
