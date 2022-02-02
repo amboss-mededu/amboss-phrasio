@@ -29,8 +29,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vite",
     "build": "vite build",
+    "dev": "vite",
     "legacy": "vite build --config vite.config.legacy.ts",
     "serve": "vite preview"
   },
