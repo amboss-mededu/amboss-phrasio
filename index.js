@@ -9,6 +9,7 @@ window.ambossAnnotationOptions.shouldAnnotate = true
 window.ambossAnnotationOptions.annotationVariant = 'underline'
 window.ambossAnnotationOptions.campaign = '123890'
 window.ambossAnnotationOptions.token = '794f2738efab8ed2814d44a638e10a43'
+window.ambossAnnotationOptions.offline = false
 
 // window.ambossAnnotationOptions.locale = 'us'
 window.ambossAnnotationOptions.locale = 'de'
