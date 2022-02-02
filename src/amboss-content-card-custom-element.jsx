@@ -96,9 +96,7 @@ const ContentCard = ({
 
 class AmbossContentCard extends HTMLElement {
   static get observedAttributes() {
-    return [
-      "data-content-id",
-    ];
+    return [ "data-content-id" ];
   }
 
   get contentId() {
@@ -139,6 +137,8 @@ class AmbossContentCard extends HTMLElement {
     if (typeof window.ambossAnnotationAdaptor.getTooltipContent !== 'function') return undefined;
     if (window.ambossAnnotationOptions.locale !== 'us' && window.ambossAnnotationOptions.locale !== 'de') return undefined;
     if (!this.contentId) return undefined;
+    console.log('===> ambossAnnotationOptions', window.ambossAnnotationOptions)
+    console.log('===> this.contentId', this.contentId)
 
     window.ambossAnnotationAdaptor.getTooltipContent(this.contentId).then((res) => {
       const { title, subtitle, body, destinations=[], media=[] } = res || {};
