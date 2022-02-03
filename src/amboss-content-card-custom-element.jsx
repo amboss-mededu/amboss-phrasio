@@ -140,7 +140,7 @@ class AmbossContentCard extends HTMLElement {
     if (window.ambossAnnotationOptions.locale !== 'us' && window.ambossAnnotationOptions.locale !== 'de') return undefined;
     if (!this.contentId) return undefined;
 
-    setTimeout(window.ambossAnnotationAdaptor.getTooltipContent(newValue || this.contentId).then((res) => {
+    setTimeout(() => window.ambossAnnotationAdaptor.getTooltipContent(newValue || this.contentId).then((res) => {
       const { title, subtitle, body, destinations=[], media=[] } = res || {};
       render(
           <>
