@@ -106,7 +106,7 @@ class AmbossContentCard extends HTMLElement {
   }
 
   get show() {
-    return this.getAttribute("show-popper");
+    return this.hasAttribute("show-popper");
   }
 
   constructor() {
