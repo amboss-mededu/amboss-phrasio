@@ -1,4 +1,5 @@
 import { render } from "preact";
+import { useState } from "preact/hooks";
 import {
   Icon,
   Card,
@@ -18,18 +19,18 @@ import { link_clicked } from "./event-names";
 import styles from "./amboss-content-card-custom-element.css";
 
 const ContentCard = ({
+  show,
+  getData,
+  showDestinations,
   contentId,
   locale,
   theme,
-  title,
-  subtitle = "",
-  body,
-  destinations = [],
-  media = [],
   customBranding,
   track,
 }) => {
-  if (!contentId) return <div />
+  const { title, subtitle, body, destinations=[], media=[] } = useState(getData())
+
+  if (!show) return (<div />)
   return (
     <div id="content" className={theme}>
       <Card key={title}>
@@ -38,7 +39,7 @@ const ContentCard = ({
         <CardBox>
           <Stack space="xs">
             {body ? <Text>{body}</Text> : ""}
-            {destinations.length > 0 ? (
+            {showDestinations && destinations.length > 0 ? (
               <Stack space="xs">
                 {destinations.map(({ label, href }) => {
                   function handleLinkClick(e) {
@@ -97,11 +98,15 @@ const ContentCard = ({
 
 class AmbossContentCard extends HTMLElement {
   static get observedAttributes() {
-    return [ "data-content-id" ];
+    return [ "data-content-id", "show-popper" ];
   }
 
   get contentId() {
     return this.getAttribute("data-content-id");
+  }
+
+  get show() {
+    return this.getAttribute("show-popper");
   }
 
   constructor() {
@@ -130,40 +135,37 @@ class AmbossContentCard extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue) {
       console.log('===> name, oldValue, newValue', name, oldValue, newValue)
-      if (name === 'data-content-id') this.render(newValue);
+      if (name === 'data-content-id' && newValue !== null) this.render();
     }
   }
 
-  render(newValue) {
+  render() {
     if (!window.ambossAnnotationOptions || !window.ambossAnnotationAdaptor) return undefined;
     if (typeof window.ambossAnnotationAdaptor.getTooltipContent !== 'function') return undefined;
     if (window.ambossAnnotationOptions.locale !== 'us' && window.ambossAnnotationOptions.locale !== 'de') return undefined;
     if (!this.contentId) return undefined;
+    if (!this.show) return undefined;
+    const getData = () => window.ambossAnnotationAdaptor.getTooltipContent(this.contentId)
 
-    setTimeout(() => window.ambossAnnotationAdaptor.getTooltipContent(newValue || this.contentId).then((res) => {
-      const { title, subtitle, body, destinations=[], media=[] } = res || {};
-      render(
-          <>
-            <div id="amboss-content-card-arrow" data-popper-arrow>
-              <div id="buffer"></div>
-            </div>
-            <ContentCard
-                contentId={this.contentId}
-                title={title}
-                subtitle={subtitle}
-                body={body}
-                media={media}
-                destinations={window.ambossAnnotationOptions.withLinks === 'no' ? [] : destinations}
-                locale={window.ambossAnnotationOptions.locale}
-                theme={window.ambossAnnotationOptions.theme}
-                campaign={window.ambossAnnotationOptions.campaign}
-                customBranding={window.ambossAnnotationOptions.customBranding}
-                track={window.ambossAnnotationAdaptor.track}
-            />
-          </>,
-          this.shadowRoot
-      );
-    }), 10)}
+    render(
+        <>
+          <div id="amboss-content-card-arrow" data-popper-arrow>
+            <div id="buffer"></div>
+          </div>
+          <ContentCard
+              getData={getData}
+              contentId={this.contentId}
+              showDestinations={window.ambossAnnotationOptions.withLinks !== 'no'}
+              locale={window.ambossAnnotationOptions.locale}
+              theme={window.ambossAnnotationOptions.theme}
+              campaign={window.ambossAnnotationOptions.campaign}
+              customBranding={window.ambossAnnotationOptions.customBranding}
+              track={window.ambossAnnotationAdaptor.track}
+          />
+        </>,
+        this.shadowRoot
+    );
+  }
   }
 
 export default AmbossContentCard;
