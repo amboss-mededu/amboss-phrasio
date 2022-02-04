@@ -15,6 +15,7 @@
   height: auto;
 }
 
+
 :host-context(amboss-content-card) #content * {
   height: 0;
 }
@@ -35,6 +36,17 @@
   width: 10px;
   height: 10px;
   background-color: #fff;
+}
+
+@keyframes c3 {
+  to {
+    stroke-dashoffset: 136;
+  }
+}
+:host-context(amboss-content-card[show-popper]) .amboss-animated-logo-inner {
+  stroke: rgb(13, 191, 143);
+  animation: 2s linear 0s infinite normal none running c3;
+  stroke-dasharray: 17;
 }
 
 :host-context(amboss-content-card[data-theme="dark-theme"]) svg.tooltip-logo .black {
