@@ -1,5 +1,4 @@
 import { render } from "preact";
-import { useState } from "preact/hooks";
 import {
   Icon,
   Card,
@@ -18,9 +17,22 @@ import { FEEDBACK_URL_DE, FEEDBACK_URL_EN } from "./config";
 import { link_clicked } from "./event-names";
 import styles from "./amboss-content-card-custom-element.css";
 
+const LoadingCard = ({ theme }) => {
+  return (
+      <div id="content" className={theme}>
+        <Card>
+          <CardBox>
+            <Stack space="xs"><svg id="triangle" width="100" height="100" viewBox="-3 -4 39 39">
+              <polygon fill="transparent" stroke-width="1" points="16,0 32,32 0,32" className="amboss-animated-logo-inner"></polygon>
+            </svg></Stack>
+          </CardBox>
+        </Card>
+      </div>
+  );
+};
+
 const ContentCard = ({
-  show,
-  getData,
+  data,
   showDestinations,
   contentId,
   locale,
@@ -28,9 +40,7 @@ const ContentCard = ({
   customBranding,
   track,
 }) => {
-  const { title, subtitle, body, destinations=[], media=[] } = useState(getData())
-
-  if (!show) return (<div />)
+  const { title, subtitle, body, destinations=[], media=[] } = data || {}
   return (
     <div id="content" className={theme}>
       <Card key={title}>
@@ -98,15 +108,11 @@ const ContentCard = ({
 
 class AmbossContentCard extends HTMLElement {
   static get observedAttributes() {
-    return [ "data-content-id", "show-popper" ];
+    return [ "data-content-id" ];
   }
 
   get contentId() {
     return this.getAttribute("data-content-id");
-  }
-
-  get show() {
-    return this.getAttribute("show-popper");
   }
 
   constructor() {
@@ -133,38 +139,42 @@ class AmbossContentCard extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue !== newValue) {
-      console.log('===> name, oldValue, newValue', name, oldValue, newValue)
-      if (name === 'data-content-id' && newValue !== null) this.render();
-    }
+    if (oldValue !== newValue) this.render()
   }
 
   render() {
+    if (!this.contentId) {
+      render(<div></div>, this.shadowRoot)
+      return undefined
+    }
+
     if (!window.ambossAnnotationOptions || !window.ambossAnnotationAdaptor) return undefined;
     if (typeof window.ambossAnnotationAdaptor.getTooltipContent !== 'function') return undefined;
     if (window.ambossAnnotationOptions.locale !== 'us' && window.ambossAnnotationOptions.locale !== 'de') return undefined;
-    if (!this.contentId) return undefined;
-    if (!this.show) return undefined;
-    const getData = () => window.ambossAnnotationAdaptor.getTooltipContent(this.contentId)
 
-    render(
-        <>
-          <div id="amboss-content-card-arrow" data-popper-arrow>
-            <div id="buffer"></div>
-          </div>
-          <ContentCard
-              getData={getData}
-              contentId={this.contentId}
-              showDestinations={window.ambossAnnotationOptions.withLinks !== 'no'}
-              locale={window.ambossAnnotationOptions.locale}
-              theme={window.ambossAnnotationOptions.theme}
-              campaign={window.ambossAnnotationOptions.campaign}
-              customBranding={window.ambossAnnotationOptions.customBranding}
-              track={window.ambossAnnotationAdaptor.track}
-          />
-        </>,
-        this.shadowRoot
-    );
+    render(<LoadingCard theme={window.ambossAnnotationOptions.theme}/>, this.shadowRoot)
+
+    window.ambossAnnotationAdaptor.getTooltipContent(this.contentId).then((_data) => {
+      const data = _data || { title: "Something went wrong" }
+      render(
+          <>
+            <div id="amboss-content-card-arrow" data-popper-arrow>
+              <div id="buffer"></div>
+            </div>
+            <ContentCard
+                data={data}
+                contentId={this.contentId}
+                showDestinations={window.ambossAnnotationOptions.withLinks !== 'no'}
+                locale={window.ambossAnnotationOptions.locale}
+                theme={window.ambossAnnotationOptions.theme}
+                campaign={window.ambossAnnotationOptions.campaign}
+                customBranding={window.ambossAnnotationOptions.customBranding}
+                track={window.ambossAnnotationAdaptor.track}
+            />
+          </>,
+          this.shadowRoot
+      )
+    });
   }
   }
 
