@@ -8,8 +8,7 @@ import {
   Inline,
   Link,
   Text,
-  H1,
-  H2
+  H5
 } from "@amboss/design-system";
 import { loadFonts } from "./utils";
 import TooltipLogo from "./TooltipLogo";
@@ -40,12 +39,16 @@ const ContentCard = ({
   customBranding,
   track,
 }) => {
-  const { title, subtitle, body, destinations=[], media=[] } = data || {}
+  const { title, subtitle = '', body, destinations=[], media=[] } = data || {}
+  if (!contentId || !title) return <div></div>
   return (
     <div id="content" className={theme}>
       <Card key={title}>
-        <H1>{contentId ? title : ""}</H1>
-        <H2>{contentId ? subtitle : ""}</H2>
+        <CardBox>
+          <H5>{title}</H5>
+          <Text>{subtitle}</Text>
+        </CardBox>
+        <Divider />
         <CardBox>
           <Stack space="xs">
             {body ? <Text>{body}</Text> : ""}
@@ -146,11 +149,30 @@ class AmbossContentCard extends HTMLElement {
     if (!window.ambossAnnotationOptions || !window.ambossAnnotationAdaptor) return undefined;
     if (typeof window.ambossAnnotationAdaptor.getTooltipContent !== 'function') return undefined;
     if (window.ambossAnnotationOptions.locale !== 'us' && window.ambossAnnotationOptions.locale !== 'de') return undefined;
-
-    // render(<LoadingCard theme={window.ambossAnnotationOptions.theme}/>, this.shadowRoot)
+    if (!this.contentId) {
+      render(
+          <>
+            <div id="amboss-content-card-arrow" data-popper-arrow>
+              <div id="buffer"></div>
+            </div>
+            <div></div>
+          </>,
+          this.shadowRoot
+      )
+      return undefined
+    }
+    render(
+        <>
+          <div id="amboss-content-card-arrow" data-popper-arrow>
+            <div id="buffer"></div>
+          </div>
+          <LoadingCard theme={window.ambossAnnotationOptions.theme}/>
+        </>,
+        this.shadowRoot
+    )
 
     window.ambossAnnotationAdaptor.getTooltipContent(this.contentId).then((_data) => {
-      const data = _data || { title: "Something went wrong" }
+      const data = _data || { title: "Something went wrong while fetching this card." }
       render(
           <>
             <div id="amboss-content-card-arrow" data-popper-arrow>
