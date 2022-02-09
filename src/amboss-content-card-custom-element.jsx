@@ -143,16 +143,11 @@ class AmbossContentCard extends HTMLElement {
   }
 
   render() {
-    if (!this.contentId) {
-      render(<div></div>, this.shadowRoot)
-      return undefined
-    }
-
     if (!window.ambossAnnotationOptions || !window.ambossAnnotationAdaptor) return undefined;
     if (typeof window.ambossAnnotationAdaptor.getTooltipContent !== 'function') return undefined;
     if (window.ambossAnnotationOptions.locale !== 'us' && window.ambossAnnotationOptions.locale !== 'de') return undefined;
 
-    render(<LoadingCard theme={window.ambossAnnotationOptions.theme}/>, this.shadowRoot)
+    // render(<LoadingCard theme={window.ambossAnnotationOptions.theme}/>, this.shadowRoot)
 
     window.ambossAnnotationAdaptor.getTooltipContent(this.contentId).then((_data) => {
       const data = _data || { title: "Something went wrong" }
