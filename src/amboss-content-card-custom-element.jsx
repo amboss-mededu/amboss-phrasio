@@ -8,7 +8,12 @@ import {
   Inline,
   Link,
   Text,
-  H5
+  H5,
+  ThemeProvider,
+  light,
+  dark,
+  CacheProvider,
+  createCache
 } from "@amboss/design-system";
 import { loadFonts } from "./utils";
 import TooltipLogo from "./TooltipLogo";
@@ -46,12 +51,12 @@ const ContentCard = ({
       <Card key={title}>
         <CardBox>
           <H5>{title}</H5>
-          <Text>{subtitle}</Text>
+          <Text variant='tertiary' size='s'>{subtitle}</Text>
         </CardBox>
         <Divider />
         <CardBox>
           <Stack space="xs">
-            {body ? <Text>{body}</Text> : ""}
+            {body ? <Text size='s'>{body}</Text> : ""}
             {showDestinations && destinations.length > 0 ? (
               <Stack space="xs">
                 {destinations.map(({ label, href }) => {
@@ -67,7 +72,7 @@ const ContentCard = ({
                       <Link
                         href={href}
                         variant="primary"
-                        size="l"
+                        size="xs"
                         onClick={handleLinkClick}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -88,7 +93,7 @@ const ContentCard = ({
             <Divider />
             <CardBox>
               <Inline vAlignItems="center" alignItems="spaceBetween">
-                <TooltipLogo />
+                <TooltipLogo theme={window.ambossAnnotationOptions.theme}/>
                 <Link
                   size="s"
                   variant="tertiary"
@@ -109,6 +114,19 @@ const ContentCard = ({
   );
 };
 
+const Wrapper = ({ emotionCache, theme, children }) => {
+    return (
+        <ThemeProvider theme={theme}>
+            <CacheProvider value={emotionCache}>
+                <div id="amboss-content-card-arrow" data-popper-arrow>
+                    <div id="buffer"></div>
+                </div>
+                {children}
+            </CacheProvider>
+        </ThemeProvider>
+    )
+}
+
 class AmbossContentCard extends HTMLElement {
   static get observedAttributes() {
     return [ "data-content-id" ];
@@ -121,24 +139,14 @@ class AmbossContentCard extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.emotionCache = createCache({
+      container: this.shadowRoot,
+    });
+    const styleEl = document.createElement('style')
+    styleEl.innerText = styles.replaceAll(/\n/g, "")
+    this.shadowRoot.appendChild(styleEl);
     loadFonts();
-  }
 
-  connectedCallback() {
-    // todo: START: This is some very specific stuff re the ds and web-ext
-    const DSStyleElem = document.createElement("style");
-    const reg = /Card|Text|Inline|Icon|Divider|Box|Stack|Header|Link|Button/;
-    DSStyleElem.innerText = Array.from(
-      document.getElementsByTagName("style")
-    ).reduce((acc, cur) => {
-      if (!cur.innerText) return acc;
-      return reg.test(cur.innerText.substring(0, 20))
-        ? `${acc} ${cur.innerText.split("\n")[0]}`
-        : acc;
-    }, "");
-    DSStyleElem.innerText = DSStyleElem.innerText + styles.replace(/\n/, "");
-    this.shadowRoot.appendChild(DSStyleElem);
-    // END
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -151,33 +159,25 @@ class AmbossContentCard extends HTMLElement {
     if (window.ambossAnnotationOptions.locale !== 'us' && window.ambossAnnotationOptions.locale !== 'de') return undefined;
     if (!this.contentId) {
       render(
-          <>
-            <div id="amboss-content-card-arrow" data-popper-arrow>
-              <div id="buffer"></div>
-            </div>
+          <Wrapper emotionCache={this.emotionCache} theme={window.ambossAnnotationOptions.theme === 'dark-theme' ? dark : light}>
             <div></div>
-          </>,
+          </Wrapper>,
           this.shadowRoot
       )
       return undefined
     }
+
     render(
-        <>
-          <div id="amboss-content-card-arrow" data-popper-arrow>
-            <div id="buffer"></div>
-          </div>
+        <Wrapper emotionCache={this.emotionCache} theme={window.ambossAnnotationOptions.theme === 'dark-theme' ? dark : light}>
           <LoadingCard theme={window.ambossAnnotationOptions.theme}/>
-        </>,
+          </Wrapper>,
         this.shadowRoot
     )
 
     window.ambossAnnotationAdaptor.getTooltipContent(this.contentId).then((_data) => {
       const data = _data || { title: "Something went wrong while fetching this card." }
       render(
-          <>
-            <div id="amboss-content-card-arrow" data-popper-arrow>
-              <div id="buffer"></div>
-            </div>
+          <Wrapper emotionCache={this.emotionCache} theme={window.ambossAnnotationOptions.theme === 'dark-theme' ? dark : light}>
             <ContentCard
                 data={data}
                 contentId={this.contentId}
@@ -188,7 +188,7 @@ class AmbossContentCard extends HTMLElement {
                 customBranding={window.ambossAnnotationOptions.customBranding}
                 track={window.ambossAnnotationAdaptor.track}
             />
-          </>,
+          </Wrapper>,
           this.shadowRoot
       )
     });

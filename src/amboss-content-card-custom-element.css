@@ -49,10 +49,6 @@
   stroke-dasharray: 17;
 }
 
-:host-context(amboss-content-card[data-theme="dark-theme"]) svg.tooltip-logo .black {
-  fill: #fff;
-}
-
 :host-context(amboss-content-card[data-theme="dark-theme"]) > #amboss-content-card-arrow::before {
   background-color: #24282d;
 }

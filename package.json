@@ -28,14 +28,13 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "vite build",
     "dev": "vite",
     "legacy": "vite build --config vite.config.legacy.ts",
     "serve": "vite preview"
   },
   "dependencies": {
-    "@amboss/design-system": "^0.27.2",
+    "@amboss/design-system": "^1.0.10",
     "preact": "^10.6.5"
   },
   "devDependencies": {
