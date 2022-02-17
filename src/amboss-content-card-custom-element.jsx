@@ -72,7 +72,7 @@ const ContentCard = ({
                       <Link
                         href={href}
                         variant="primary"
-                        size="xs"
+                        size="s"
                         onClick={handleLinkClick}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -114,18 +114,16 @@ const ContentCard = ({
   );
 };
 
-const Wrapper = ({ emotionCache, theme, children }) => {
-    return (
+const Wrapper = ({ emotionCache, theme, themeName, children }) => (
         <ThemeProvider theme={theme}>
             <CacheProvider value={emotionCache}>
-                <div id="amboss-content-card-arrow" data-popper-arrow>
+                <div id="amboss-content-card-arrow" className={themeName} data-popper-arrow>
                     <div id="buffer"></div>
                 </div>
                 {children}
             </CacheProvider>
         </ThemeProvider>
     )
-}
 
 class AmbossContentCard extends HTMLElement {
   static get observedAttributes() {
@@ -159,7 +157,7 @@ class AmbossContentCard extends HTMLElement {
     if (window.ambossAnnotationOptions.locale !== 'us' && window.ambossAnnotationOptions.locale !== 'de') return undefined;
     if (!this.contentId) {
       render(
-          <Wrapper emotionCache={this.emotionCache} theme={window.ambossAnnotationOptions.theme === 'dark-theme' ? dark : light}>
+          <Wrapper emotionCache={this.emotionCache} theme={window.ambossAnnotationOptions.theme === 'dark-theme' ? dark : light} themeName={window.ambossAnnotationOptions.theme}>
             <div></div>
           </Wrapper>,
           this.shadowRoot
@@ -168,7 +166,7 @@ class AmbossContentCard extends HTMLElement {
     }
 
     render(
-        <Wrapper emotionCache={this.emotionCache} theme={window.ambossAnnotationOptions.theme === 'dark-theme' ? dark : light}>
+        <Wrapper emotionCache={this.emotionCache} theme={window.ambossAnnotationOptions.theme === 'dark-theme' ? dark : light} themeName={window.ambossAnnotationOptions.theme}>
           <LoadingCard theme={window.ambossAnnotationOptions.theme}/>
           </Wrapper>,
         this.shadowRoot
@@ -177,7 +175,7 @@ class AmbossContentCard extends HTMLElement {
     window.ambossAnnotationAdaptor.getTooltipContent(this.contentId).then((_data) => {
       const data = _data || { title: "Something went wrong while fetching this card." }
       render(
-          <Wrapper emotionCache={this.emotionCache} theme={window.ambossAnnotationOptions.theme === 'dark-theme' ? dark : light}>
+          <Wrapper emotionCache={this.emotionCache} theme={window.ambossAnnotationOptions.theme === 'dark-theme' ? dark : light} themeName={window.ambossAnnotationOptions.theme}>
             <ContentCard
                 data={data}
                 contentId={this.contentId}
