@@ -68,11 +68,11 @@ const ContentCard = ({
                   }
                   return (
                     <Inline key={label} space="s" noWrap vAlignItems="center">
-                      <Icon name="article" variant="primary" />
+                      <Icon name="article" variant="primary"/>
                       <Link
                         href={href}
                         variant="primary"
-                        size="s"
+                        size="m"
                         onClick={handleLinkClick}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -144,7 +144,6 @@ class AmbossContentCard extends HTMLElement {
     styleEl.innerText = styles.replaceAll(/\n/g, "")
     this.shadowRoot.appendChild(styleEl);
     loadFonts();
-
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
