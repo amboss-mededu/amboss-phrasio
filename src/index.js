@@ -1,3 +1,3 @@
-import AmbossContentCard from "./amboss-content-card-custom-element";
+import ContentCard from "./content-card-custom-element";
 
-export { AmbossContentCard };
+export { ContentCard };

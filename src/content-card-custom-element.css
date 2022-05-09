@@ -1,0 +1,76 @@
+:host-context(content-card) {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12), 0 32px 112px rgba(0, 0, 0, 0.24);
+  border-radius: 12px;
+  color: initial;
+  visibility: hidden;
+  pointer-events: none;
+  height: 0;
+}
+
+:host-context(content-card[show-popper]) {
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 9999;
+  max-width: 400px;
+  height: auto;
+}
+
+
+:host-context(content-card) #content * {
+  height: 0;
+}
+
+:host-context(content-card[show-popper]) #content * {
+  height: auto;
+}
+
+@keyframes c3 {
+  to {
+    stroke-dashoffset: 136;
+  }
+}
+:host-context(content-card[show-popper]) .animated-logo-inner {
+  stroke: rgb(13, 191, 143);
+  animation: 2s linear 0s infinite normal none running c3;
+  stroke-dasharray: 17;
+}
+
+:host-context(content-card[show-popper]) > #content-card-arrow::before {
+  content: "";
+  visibility: visible;
+  transform: rotate(45deg);
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+}
+
+:host-context(content-card[show-popper]) > #content-card-arrow.dark-theme::before {
+  background-color: #24282d;
+}
+
+:host-context(content-card[data-popper-placement^="top"]) > #content-card-arrow {
+  bottom: 5px;
+}
+
+:host-context(content-card[data-popper-placement^="bottom"]) > #content-card-arrow {
+  top: -5px;
+}
+
+:host-context(content-card[show-popper]) > #content-card-arrow > #buffer::before {
+  content: "";
+  position: absolute;
+  background-color: transparent;
+}
+
+:host-context(content-card[data-popper-placement^="bottom"]) > #content-card-arrow > #buffer::before,
+:host-context(content-card[data-popper-placement^="top"]) > #content-card-arrow > #buffer::before {
+  width: 240px;
+  height: 1.5rem;
+  margin-left: -120px;
+  margin-top: -0.5rem;
+}
+
+:host-context(content-card[data-popper-placement^="top"]) > #content-card-arrow > #buffer::before {
+  margin-top: -0.5rem;
+}
