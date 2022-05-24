@@ -47,11 +47,7 @@ function getPopperOptions(arrow) {
 
 export default class Anchor extends HTMLElement {
   static get observedAttributes() {
-    return [MATCH_WRAPPER_CONTENT_ID_ATTR, 'data-annotation-variant', 'data-theme'];
-  }
-
-  get theme() {
-    return this.getAttribute('data-theme');
+    return [MATCH_WRAPPER_CONTENT_ID_ATTR, 'data-annotation-variant'];
   }
 
   get contentId() {

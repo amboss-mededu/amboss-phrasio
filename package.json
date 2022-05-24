@@ -31,7 +31,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "@amboss/design-system": "^1.2.10",
+    "@amboss/design-system": "^1.2.12",
     "@popperjs/core": "^2.11.5",
     "@webcomponents/webcomponentsjs": "^2.6.0",
     "construct-style-sheets-polyfill": "^3.1.0",
