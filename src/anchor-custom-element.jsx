@@ -10,9 +10,8 @@ import {
 
 function getPopperOptions(arrow) {
   return {
-    placement: 'auto',
     modifiers: [
-      { name: 'eventListeners', enabled: true },
+      { name: 'eventListeners', enabled: false },
       {
         name: 'offset',
         enabled: true,
@@ -24,7 +23,6 @@ function getPopperOptions(arrow) {
         name: 'flip',
         enabled: true,
         options: {
-          allowedAutoPlacements: ['top', 'bottom', 'left', 'right'],
           rootBoundary: 'viewport'
         }
       },
@@ -123,20 +121,13 @@ export default class Anchor extends HTMLElement {
     }
 
     this.content.setAttribute(MATCH_WRAPPER_CONTENT_ID_ATTR, this.contentId);
-    if (this.content.getAttribute(MATCH_WRAPPER_CONTENT_ID_ATTR) !== this.contentId) {
-      this.open();
-      return undefined;
-    }
 
     this.arrow = this.content.shadowRoot.querySelector(ARROW_ID_SELECTOR);
-    if (!this.arrow) {
-      this.open();
-      return undefined;
-    }
 
     this.popperInstance = createPopper(this.target, this.content, getPopperOptions(this.arrow));
-    this.popperInstance.forceUpdate();
+
     this.content.setAttribute('show-popper', '');
+
     this.track([
       TOOLTIP_OPENED_EVENT,
       {
@@ -154,6 +145,6 @@ export default class Anchor extends HTMLElement {
           this.popperInstance = null;
         }
       }
-    }, 50);
+    }, 50)
   }
 }

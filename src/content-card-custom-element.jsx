@@ -122,30 +122,24 @@ const Wrapper = ({ emotionCache, theme, themeName, children }) => {
     </ThemeProvider>
 }
 
+// setting the width and height of the content element as early and arbitrarily as possible REALLY improves popper positioning
 const styles = `
-:host-context(content-card) {
+:host-context([data-content-id]){
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12), 0 32px 112px rgba(0, 0, 0, 0.24);
   border-radius: 12px;
   color: initial;
   visibility: hidden;
   pointer-events: none;
   height: 0;
-  max-width: 400px;
+  width: 400px;
 }
 
-:host-context(content-card[show-popper]) {
+:host-context([show-popper]), :host-context([as-card]) {
   visibility: visible;
   pointer-events: auto;
   z-index: 9999;
-  height: auto;
-}
-
-:host-context(content-card) #content * {
-  height: 0;
-}
-
-:host-context(content-card[show-popper]) #content *, :host-context(content-card[as-card]) #content * {
-  height: auto;
+  min-height: 200px;
+  width: 400px;
 }
 
 @keyframes c3 {
@@ -153,17 +147,18 @@ const styles = `
     stroke-dashoffset: 136;
   }
 }
-:host-context(content-card[show-popper]) .animated-logo-inner, :host-context(content-card[as-card]) .animated-logo-inner {
+
+:host-context([show-popper]) .animated-logo-inner, :host-context([as-card]) .animated-logo-inner {
   stroke: rgb(13, 191, 143);
   animation: 2s linear 0s infinite normal none running c3;
   stroke-dasharray: 17;
 }
 
-:host-context(content-card[show-popper][as-card]) > #content-card-arrow, :host-context(content-card[show-popper][no-arrow]) > #content-card-arrow {
+:host-context([as-card]) > #content-card-arrow {
   display: none;
 }
 
-:host-context(content-card[show-popper]) > #content-card-arrow::before {
+:host-context([show-popper]) > #content-card-arrow::before {
   content: "";
   visibility: visible;
   transform: rotate(45deg);
@@ -173,40 +168,40 @@ const styles = `
   background-color: #fff;
 }
 
-:host-context(content-card[show-popper]) > #content-card-arrow.dark-theme::before {
+:host-context([show-popper]) > #content-card-arrow.dark-theme::before {
   background-color: #24282d;
 }
 
-:host-context(content-card[data-popper-placement^="top"]) > #content-card-arrow {
+:host-context([data-popper-placement^="top"]) > #content-card-arrow {
   bottom: 5px;
 }
 
-:host-context(content-card[data-popper-placement^="bottom"]) > #content-card-arrow {
+:host-context([data-popper-placement^="bottom"]) > #content-card-arrow {
   top: -5px;
 }
 
-:host-context(content-card[show-popper]) > #content-card-arrow > #buffer::before {
+:host-context([show-popper]) > #content-card-arrow > #buffer::before {
   content: "";
   position: absolute;
   background-color: transparent;
 }
 
-:host-context(content-card[data-popper-placement^="bottom"]) > #content-card-arrow > #buffer::before,
-:host-context(content-card[data-popper-placement^="top"]) > #content-card-arrow > #buffer::before {
+:host-context([data-popper-placement^="bottom"]) > #content-card-arrow > #buffer::before,
+:host-context([data-popper-placement^="top"]) > #content-card-arrow > #buffer::before {
   width: 240px;
   height: 1.5rem;
   margin-left: -120px;
   margin-top: -0.5rem;
 }
 
-:host-context(content-card[data-popper-placement^="top"]) > #content-card-arrow > #buffer::before {
+:host-context([data-popper-placement^="top"]) > #content-card-arrow > #buffer::before {
   margin-top: -0.5rem;
 }
 `
 
 class ContentCard extends HTMLElement {
   static get observedAttributes() {
-    return [ MATCH_WRAPPER_CONTENT_ID_ATTR, "data-locale", "data-theme", "data-popper-placement", "show-popper" ];
+    return [ MATCH_WRAPPER_CONTENT_ID_ATTR, "data-locale", "data-theme", "show-popper" ];
   }
 
   get contentId() {
@@ -225,10 +220,6 @@ class ContentCard extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this.root = createRoot(this.shadowRoot);
-
-    this.getContent = async () => 'getContent is not defined'
-    this.track = (args) => console.log('placeholder tracking function', args)
-
     loadFonts();
 
     const stylesheet = new CSSStyleSheet();
@@ -251,7 +242,7 @@ class ContentCard extends HTMLElement {
 
     if (!this.contentId) {
       this.root.render(
-          <Wrapper emotionCache={this.emotionCache} theme={this.theme === 'dark-theme' ? dark : light} themeName={this.theme} asTooltip={this.asTooltip} withArrow={this.withArrow}>
+          <Wrapper emotionCache={this.emotionCache} theme={this.theme === 'dark-theme' ? dark : light} themeName={this.theme}>
             <div></div>
           </Wrapper>
       )
@@ -259,7 +250,7 @@ class ContentCard extends HTMLElement {
     }
 
     this.root.render(
-        <Wrapper emotionCache={this.emotionCache} theme={this.theme === 'dark-theme' ? dark : light} themeName={this.theme} asTooltip={this.asTooltip} withArrow={this.withArrow}>
+        <Wrapper emotionCache={this.emotionCache} theme={this.theme === 'dark-theme' ? dark : light} themeName={this.theme}>
           <LoadingCard theme={this.theme}/>
         </Wrapper>
     )
@@ -267,7 +258,7 @@ class ContentCard extends HTMLElement {
     this.getContent(this.contentId).then((data) => {
       if (data === 'getContent is not defined') console.log('|> getContent is not defined ===> ');
       this.root.render(
-          <Wrapper emotionCache={this.emotionCache} theme={this.theme === 'dark-theme' ? dark : light} themeName={this.theme} asTooltip={this.asTooltip} withArrow={this.withArrow}>
+          <Wrapper emotionCache={this.emotionCache} theme={this.theme === 'dark-theme' ? dark : light} themeName={this.theme}>
             <ContentCardUI
                 data={data}
                 contentId={this.contentId}
